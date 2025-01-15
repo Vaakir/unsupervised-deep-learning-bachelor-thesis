@@ -6,8 +6,10 @@
 #SBATCH --output=mnist_test_01.out
  
 # Activate environment
-uenv verbose cuda-11.4 cudnn-11.4-8.2.4
-uenv miniconda-python39
+
+uenv verbose cuda-11.4.4 cudnn-11.x-8.8.0 # must use this version!!
+uenv miniconda3-py39 # must use this version!!
+
 conda activate pytorch_env
 # Run the Python script that uses the GPU
 python -u pytorch_mnist.py
