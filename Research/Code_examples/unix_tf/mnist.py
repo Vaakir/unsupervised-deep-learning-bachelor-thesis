@@ -42,3 +42,5 @@ model.fit(
     epochs=6,
     validation_data=ds_test,
 )
+
+model.save("model.keras")
