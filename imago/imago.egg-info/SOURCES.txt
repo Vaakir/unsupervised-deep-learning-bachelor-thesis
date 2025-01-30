@@ -1,7 +1,0 @@
-README.md
-pyproject.toml
-setup.py
-imago.egg-info/PKG-INFO
-imago.egg-info/SOURCES.txt
-imago.egg-info/dependency_links.txt
-imago.egg-info/top_level.txt
