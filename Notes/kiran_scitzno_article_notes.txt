@@ -485,6 +485,22 @@ Questions that popped up in my head:
         2. Distance_loss(AE, brain)
         3. Distance_loss(VAE, brain)
         4. Distance_loss(GAN, brain)
+
+
+        Classification algorithms: 
+            0. Distance_loss(AE, brain) > threshold (for splitting the dataset in two only)
+            1. CNN
+            2. Random forest (RF) - displacement field
+            3. Hybridized firefly algorithm (FA) and probabilistic NN (PNN)
+            4. Particle swarm optimization (IPSO)
+            5. Support Vector Machines (SVM)
+            6. ROI (Region of interest)
+            7. 
+
+
+        Applicants were ex-cluded if mandarin is not their first language, if they were left-handed, or if they had HIV, epilepsy, stroke, Wernick
+        Korsakoff syndrome; bipolar; cirrhosis or liver failure, seizures unrelated to alcoholism, head injury with loss of consciousness more than 15 min unrelated to alcoholism,
+        depression, schizophrenia, and other psychotic disorders.
         
         To optimize the best autoencoder (Brute force, genetic algos)
 
