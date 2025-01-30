@@ -1,0 +1,529 @@
+Article notes:
+
+    #bruh. Well you know, its not like deception is a part of my trading strategy :kek:
+
+ADL4CV:DV - Encoder-decoder:
+    Unsupervised learning:
+        Find properties of the structure of the data
+        Clustering (k-means, pca)
+
+    Autoencoder:
+        Purpose, to map the input to a lower dimensionality.
+        Such that the amount of neurons needed for the image classification is smaller.
+
+
+    Semantic segmentation (FCN)
+
+    SegNet (Convolutional Encoder-Decoder)
+    L1: 
+        Conv + Batch Normalization + ReLU x2-3
+        Pooling
+        Repeat (n)x
+
+    Decoder:
+        Upsampling,
+        Conv + Batch Normalization + Relu x2-3
+        
+        Last layer: Softmax
+        https://youtu.be/aV1jWHIT2iM?list=PLog3nOPCjKBl8s3Ia4ZtmOEniuYM3pVGQ&t=924
+
+    Unpooling 
+        Conv + Batch Normalization + Relu 2x layers fixes this.
+
+        In DeConvNet:
+            Max locations from max-pooling are saved (Max Location "Switches"), resulting in good results as well as it keeps the details.
+        Unet:
+            Very similar process of saving lower level information and adding it to the high level information during the decoding (skip connection/arrow).
+
+    Image super resolution:
+        Why not learn the residual only.
+
+    Conv.D-1, ReLy.D-1, Conv.D
+
+    CNN padding: to not loose data on the outer pixels in the image as they may only be touched upon by the filter only once. (+-x/y 0 values around the input image)
+
+Articles:
+    Alcoholism Detection by Data Augmentation and Convolutional Neural Network with Stochastic Pooling:
+        Augmentation method
+        Pooling techniques (max pooling, average pooling, stochastic pooling)
+
+        Brain image classification algorithm based on 
+            CNN over
+            Random forest (RF) - displacement field
+            Hybridized firefly algorithm (FA) and probabilistic NN (PNN)
+            Particle swarm optimization (IPSO)
+            Support Vector Machines (SVM)
+
+
+        Applicants were ex-cluded if mandarin is not their first language, if they were left-handed, or if they had HIV, epilepsy, stroke, Wernick
+        Korsakoff syndrome; bipolar; cirrhosis or liver failure, seizures unrelated to alcoholism, head injury with loss of consciousness more than 15 min unrelated to alcoholism,
+        depression, schizophrenia, and other psychotic disorders.
+
+
+        Alcoholic Nonalcoholic (TABLE 1 demographic characteristics)
+            Women (n = 56) Men (n = 58) Women (n = 62) Men (n = 59)
+            Age (y) 59.0+ 8.0 56.5+ 8.9 56.9+ 8.4 55.3+ 7.9
+            Education (y) 9.9+ 1.9 9.3+ 1.6 9.6+ 2.4 9.3+ 2.5
+            DOHD (y) 13.2+ 3.5 19.6+ 5.4 0.0 ± 0.0 0.0 ± 0.0
+            DDE (gram/d) 197.6 + 62.1 300.7 + 92.1 6.8+ 4.7 4.9+ 3.8
+            LOS (y) 9.8+ 5.1 6.7+ 3.4 – –
+            AUDIT 25.1+ 4.2 25.4+ 4.9 1.5+ 2.0 1.6+ 2.2
+
+        Alcoholic Non-Alcoholic Total (TABLE 2 Division of acquired 235-image dataset)
+            Training    50  50  100
+            Test        64  71  135
+            Total       114 121 235
+
+        Total - Alcoholic - Non-Alcoholic (TABLE 3 Data augmentation of original training dataset)
+            Original Training Dataset   100     50      50
+            Image Rotation              3000    1500    1500
+            Gamma Correction            3000    1500    1500
+            Noise Injection             3000    1500    1500
+            Random Translation          4000    2000    2000
+            Training Dataset after DA   13,100  6550    6550
+
+        Input layer,
+            Convolutional layer 
+            Feature map
+            Nonlinear function
+            Activations
+            Aggregation function
+            Pooled feature map
+
+        Slice selection
+        We used FMRIB software library (FSL) v5.0 software to
+        extract brain and remove skulls for each scanned 3D im-
+        age. All the volumetric images were normalized to a stan-
+        dard MNI template, which is the standard template in FSL
+        software. Afterwards, we resampled each image to 2 mm
+        isotropic voxel. The slice at Z = 80 voxels (8 mm) at
+        MRI_152 coordinate was chosen for each patient.
+        Background was cropped, leaving a rectangle matrix with
+        size of 176 × 176, because of the ease for following clas-
+        sifier training. Two samples are shown in Fig. 1. The data
+        are available upon request
+
+        Show example image of Average vs Max vs Stochastic Pooling, (show probability map for stochastic pooling)
+
+        Data augmentation 
+        1. Image rotation -15 to 15degres
+        2. Gamma-value from 0.7-1.3 with step of 0.02
+        3. Noise injection. Zero-mean gaussian noise with variance 0.01.
+        4. Random translation (offset in xyz direction), 
+        5. Split, train, evaluate, test
+
+        Layer Parameters (TABLE 5 Parameters of each layer in proposed CNN)
+            Conv_relu_1 Filter Size = 5 × 5; No of Filters = 40; Stride = 3 × 3
+            Conv_relu_2 Filter Size = 3 × 3; No of Filters = 80; Stride = 5 × 5
+            Pool_1 Pool size = 3 × 3; Stride = 1 × 1; Padding = 1 × 1
+            Conv_relu_3 Filter Size = 3 × 3; No of filters = 120; Stride = 1 × 1; Padding = 1 × 1
+            Pool_2 Pool size = 3 × 3; Stride = 1 × 1; Padding = 1 × 1
+            Conv_relu_4 Filter Size = 3 × 3; No of filters = 120; Stride = 1 × 1; Padding = 1 × 1
+            Pool_3 Pool size = 3 × 3; Stride = 1 × 1; Padding = 1 × 1
+            Conv_relu_5 Filter Size = 3 × 3; No of filters = 120; Stride = 1 × 1; Padding = 1 × 1
+            Pool_4 Pool size = 3 × 3; Stride = 3 × 3
+            Fully_connected_1 Weights = 50 × 1920; Bias = 50 × 1
+            Fully_connected_2 Weights = 2 × 50; Bias = 2 × 1
+
+        (TABLE 7 Algorithm setting of CNN Training Parameter Value)
+            minibatch size 256
+            Initial learning rate 0.01
+            Drop period 10
+            Drop rate factor 0.1
+            Momentum 0.9
+            Maximum epoch 30
+            LF cross entropy
+
+        (TABLE 8 Confusion matrix over test set)
+            Alcoholic Non-alcoholic
+            Alcoholic 62 2
+            Non-alcoholic 2 69
+        
+        (TABLE 9 Comparison to state-of-the-art methods over our test set (Unit: %))
+            Method, Confusion Matrix, Sensitivity, Specificity, Accuracy
+            FA + PNN [11] 56 8½ 1061 87.50 85.92 86.67
+            IPSO [12] 57 7½ 665 89.06 91.55 90.37
+            HMI + SVM [14] 58 6½ 863 90.63 88.73 89.63
+            CNN + SP (Our) 62 2½ 269 96.88 97.18 97.04
+        
+        (TABLE 10 Pooling comparison)
+            Pooling technique   Sensitivity Specificity Accuracy
+            Average pooling     95.31% 94.37% 94.81%
+            Max pooling         95.31% 95.77% 95.56%
+            Stochastic pooling  96.88% 97.18% 97.04%
+        
+        (TABLE 11 Performance on different numbers of convolution layers)  
+            Number of convolution layers, Accuracy
+            2 82.96%
+            3 94.81%
+            4 95.56%
+            5 (Proposed) 97.04%
+            6 92.59%
+            7 96.30%
+        
+        (TABLE 12 Performance on different numbers of fully connected layers)
+        Number of fully connected layers Accuracy
+        1 93.33%
+        2 (Proposed) 97.04%
+        3 95.56%
+        4 91.85%
+        5 93.33%
+
+    Bias in Unsupervised Anomaly Detection in Brain MRI:
+        Significant biases related to sex, race, and scanner variations that substantially impact the results.
+
+        UAD Method. We utilized a state-of-the-art variational auto-encoder architec-ture 
+        as our UAD method2. This recent model incorporates advanced techniques,
+        including perceptual and adversarial loss functions, to enhance the accuracy
+        of image reconstructions, while constraining the latent distribution using the
+        Kullback-Leibler divergence.
+
+        To assess the reconstruction quality of the methods,
+        we use the mean absolute error (MAE). To assess the anomaly detection ability
+        of our method, we use area under the receiver operator curve (AUROC) and area
+        under the precision-recall curve (AUPRC). 
+
+        we used Pearson’s correlation to identify the impact of potential confounders on
+        the residual errors, and the Kolomogorov-Smirnov test to identify distributional
+        shifts between the AD sets of the training distribution and AD sets of the target
+        distributions. We considered results with p-values lower than 0.05 significant.
+
+        Biases:
+            Domain shifts,
+            Metrics Bias (AUROC, AUPRC)
+            Scanner shifts
+            Sex shifts
+            Race shifts
+            Left hand shifts
+    
+    Classification of Alzheimer’s Disease Based on Eight-Layer Convolutional 
+    Neural Network with Leaky Rectified Linear Unit and Max Pooling:
+        Pipeline of preprocessing:
+            Brain extraction Tool (BET)
+            Spatial Normalization (FLIRT & FNIRT)
+            Smoothing (Gaussian Kernel)
+            Slice selection (Z = -22mm)
+            Histogram Stretch
+        
+        Data augmentation:
+            + Scaling
+            + Random affine
+
+        Confusion matrix = [[TP FN] [FP TN]]
+        SEN = TP / (TP + FN)
+        SPC = TN / (TN + FP)
+        ACC = (TP + TN) / (TP + TN + FP + FN)
+
+        To avoid randomness, 10 whole runs were implemented on the K-CROSS validation
+        and the mean and standard deviation of the above three indicators were finally reported.
+
+        (TABLE 8 Comparison with other methods over the test set on average of 10 runs (Bold means the best, Unit: %))
+            Algorithm           Dataset Sensitivity Specificity Accuracy
+            BRC [4]             Private 92.04 88.57 90.31
+            TJM [5]             Private 88.78 92.86 90.82
+            RF [6]              Private 87.76 90.82 89.29
+            DF + SVM [7]        This    83.67 87.96 85.82
+            BBO [8]             This    91.63 91.84 91.73
+            MVA [9]             This    92.65 92.86 92.76
+            PZM + SCG [10]      This    92.86 92.45 92.65
+            PZM + LRC [11]      This    93.06 92.86 92.96
+            8-layer LReLU-MP CNN (Proposed) This 97.96 97.35 97.65
+
+    Three-Dimensional Convolutional Autoencoder Extracts Features of
+    Structural Brain Images With a “Diagnostic Label-Free” Approach:
+    Application to Schizophrenia Datasets:
+        Most studies disregard three-dimensional (3D) spatial information and targeted disease discrimination,
+        without considering the genetic and clinical heterogeneity of psychiatric disorders. 
+
+        There are two major concerns about applying DL to psychiatric brain imaging: 
+            (1) treatment of the high dimensionality of data
+            (2) the heterogeneity of psychiatric disorders (Feczko et al., 2019).
+
+        Feature extraction methods to be used:
+            Region of interest (ROIs), one of the most popular feature extraction methods has contributed to detecting various structural and functional
+            abnormalities in the brains of patients with psychiatric disorders.
+
+        There may be lower genetic correlation within disorders.
+        
+        For the regression analysis,
+        in order to reduce the eﬀects of correlated variables we adopted
+        ridge regression, one of regularized linear regression methods
+
+        Diﬀerences in the performances of regression models were
+        evaluated using the two-way (number of channels × number
+        of blocks) analysis of variance (ANOVA). 
+
+        The average intensities of each ROI
+        were used as the ROI-based feature for regression analysis. The
+        Student’s t-test was performed to compare the proposed 3D-
+        CAE model with the ROI method. The level of signiﬁcance
+        was set to 0.05. 
+
+        The GM area
+        was extracted from original images using a binary mask, created
+        using SPM12. As a result, the size of input images to the 3D-CAE
+        was 121 × 145 × 121 voxels.       
+
+        Subsequently, the range of signal intensities in each image was
+        normalized with a mean of 0 and a standard deviation of 1. The
+        standardized value of voxel i in the sample s, x′s,i, was calculated
+        as follows:
+            X'_{s,i} = 
+                (x_{s,i} - mu_s) / std_s  (i ∈ GM)
+                0 otherwise
+        where xs, i is the original value of intensity. μs and σs were average
+        and standard deviation of all voxels contained in the GM area of
+        sample s, respectively.
+
+    Using deep autoencoders to identify abnormal brain structural
+    patterns in neuropsychiatric disorders: A large-scale
+    multi-sample study:
+        However,
+        despite the very large number of scientific publications in this area
+        over the past two decades, the use of sMRI in real-world clinical
+        decision-making remains very limited. One of the reasons is that the
+        vast majority of existing studies have used traditional mass-univariate
+        analytical methods which are sensitive to gross and localized differ-
+        ences in the brain. These techniques are not optimal for detecting
+        neuroanatomical alterations in neuropsychiatric disorders which tend
+        to be subtle and spatially distributed 
+
+        As an
+        inherently multivariate approach, machine learning is sensitive to dis-
+        tributed and subtle differences between experimental groups. How-
+        ever, to develop a machine learning system capable of performing
+        categorization tasks with high reliability, the model must be able to
+
+        perform accurate mapping of the input data to the desired output in
+        most of the possible space of new samples. Due to the high dimen-
+        sionality of the data, this usually demands a large number of cases in
+        each experimental group (Nieuwenhuis et al., 2012; Whelan & Gara-
+        van, 2014)
+
+        Patients with patterns of brain anatomy
+        which fall outside this normal range would then be identified as out-
+        liers (Marquand, Rezek, Buitelaar, & Beckmann, 2016; Mourão-
+        Miranda et al., 2011; Sato, Rondina, & Mourão-Miranda, 2012).
+
+        The data used in this study were obtained from three public data sets:
+        Human Connectome Project (HCP) data set, Northwestern University
+        Schizophrenia Data and Software Tool (NUSDAST) data set, and
+        Autism Brain Imaging Data Exchange (ABIDE) data set. The NUSDAST
+        data set was obtained using the SchizoConnect (http://schizconnect.
+        org/), a virtual database for public schizophrenia neuroimaging data.
+        The ABIDE data set was acquired from the Neuroimaging Informatics
+        Tools and Resources Clearinghouse (NITRC) image repository (http://
+        www.nitrc.org/). Finally, the HCP data set was acquired from the data
+        management platform called ConnectomeDB (https://db.
+        humanconnectome.org). Detailed information about these data sets
+        and their acquisition parameters is presented in the Supporting
+        Information.
+        
+        We used the FreeSurfer data from the 1,113 healthy controls taken
+        from the HCP data set (Glasser et al., 2013). These data—including
+        cortical thickness and anatomical structural volume—have already
+        been extracted using the Freesurfer pipeline version 5.3.0 and made
+        available to the scientific community from the HCP. For the NUS-
+        DAST and ABIDE data sets, we used the same FreeSurfer pipeline
+        (version 5.3.0) to estimate the cortical thickness and anatomical struc-
+        tural volumes from the T1 weighted images. 
+
+        L2 regularization, yo penalize high values in the network.
+        Noise to 
+
+        In our study, to compare the performance of our normative
+        model against a traditional classification approach, we performed a
+        machine learning analysis of both clinical data sets using Support
+        Vector Machines (SVM; Cortes & Vapnik, 1995). First, we used the
+        data from the ABIDE and NUSDAST data sets as input to the SVM
+        model with the features normalized using the mean and SD from
+        the Human Connectome Project
+
+        2.7 | Patterns of neuroanatomical deviations
+        We investigated the reconstruction error of each brain region in
+        the two clinical samples (SCZ and ASD) using the deep autoenco-
+        der. We compared the values of the reconstruction error in patients
+        against HC subjects using the Mann–Whitney U test to check for
+        statistically significant regional deviations. A Bonferroni correction
+        for multiple comparisons would have been inappropriate because
+        statistical inferences in homotopic or adjacent regions were most
+        likely to be correlated rather than independent. In the absence of
+        any established procedure, we controlled for false positive rates by
+        using a conservative statistical threshold of p < .01 which yield an
+        expected false positive rate of 1%. Finally, we calculated Cliff's
+        delta (Cliff, 1993) absolute value to measure the magnitude of neu-
+        roanatomical deviations. Here Cliff's delta value measures how
+        often the deviation metric values in one distribution (i.e., patient
+        group) are larger than the values in a second distribution (i.e., HC
+        group)
+
+        During the training phase, which used data corrupted by a Gauss-
+        ian noise, the deep autoencoder learned the most robust representa-
+        tions of healthy people in its multilevel representations (Vincent et al.,
+        2008)
+
+        Man whitney U-test?
+        Inter regional correlations. (sobelxy)
+
+        Statistically significant differences in deviations between the SCZ
+        and HC groups were also found in the left precentral cortex. Previous
+        studies suggested that reductions in this regions are part of the neuro-
+        biological mechanisms underlying the onset of the illness (Rimol et al.,
+        2010; Shepherd et al., 2012; Zhou et al., 2005)
+
+        however, their reconstruction values were affected by the multivariate
+        nature of the model. Studies have indicated that visual perception in
+        ASD patients differs from that of healthy controls and that this can be
+        explained in terms of neuroanatomical differences in occipital areas
+         In addition alterations of the basal ganglia
+        have been found to correlate with impaired motor performance or repet-
+        itive and stereotyped behavior in ASD patients (Nickl-Jockschat et al.,
+        2012). Surprisingly, the left choroid plexus was the structure with the
+        highest different deviation between groups; however, this structure was
+        not significantly different between groups in the univariate analysis.
+
+        Another possible source of artifacts in our investigation relates to
+        the preprocessing of the images. Usually, automatic preprocessing
+        systems can provide spurious results (e.g., bad gray and white matter
+        segmentation). This problem is even more frequent in samples with
+        significant ventricular enlargement (Bhalla & Mahmood, 2015; McCar-
+        thy et al., 2015), such as SCZ. However, further actions to try to mini-
+        mize this effect could also introduce subjective bias from the quality
+        evaluator. In our investigation, we therefore chose to not correct pre-
+        processing step by visual assessment to guarantee a fully automatized
+        and reproducible approach. Finally, due to the nonlinear nature of the
+        model, our method does not allow one to establish the direction of
+        the alterations (i.e., increase vs. decrease in volume/thickness) when
+
+        To avoid such confounds, we
+        decided to sacrifice the ability to specify the direction of the alter-
+        ations and compare groups that were part of the same data set.
+
+        Calculate loss between reconstructed image vs loss in latent space.
+
+    MADGAN: unsupervised medical anomaly
+    detection GAN using multiple adjacent brain
+    MRI slice reconstruction:
+
+
+However, those single image reconstruc-
+tion methods mainly target diseases easy-to-detect from a single image even for non-
+expert human observers, such as glioblastoma on MR images [16] and lung cancer on
+computed tomography (CT) images [15]. Without considering continuity between mul-
+tiple adjacent images, they cannot directly discriminate diseases composed of the accu-
+mulation of subtle anatomical anomalies, such as AD. Moreover, no study has shown so
+far how unsupervised anomaly detection is associated with either disease stages, various
+(i.e., more than 2 types of ) diseases, or multi-sequence MRI scans.
+
+Therefore, this paper proposes unsupervised medical anomaly detection GAN (MAD-
+GAN), a novel two-step method using GAN-based multiple adjacent brain MRI slice
+reconstruction to detect various diseases at various stages on multi-sequence structural
+MRI (Fig. 1): (Reconstruction) Wasserstein loss with gradient penalty (WGAN-GP) [17,
+18] + 100 ℓ1 loss—trained on 3 healthy brain axial MRI slices to reconstruct the next 3
+ones—reconstructs unseen healthy/abnormal scans;
+
+Questions that popped up in my head:
+    Q:Why unsupervised apporach to brain image anomaly detection?
+    Especially when considering it is more vulnerable to biases?
+
+    Is it just that it is better if we make a more generalized approach 
+    but where we have different models that have been trained on the 
+    splitted input data (age, sex, race)
+    
+
+    
+    Why not use supervised learning and train seperate models for each disorder?
+    Why not use unsupervised learning and train seperate models for each input data (age, sex, race) to reduce the effect of these biases?
+    Why not use unsupervised learning and train one generalized "godlike" model that can find the  
+
+    Other biases may be the input data itself as it is not representative of the whole 
+    population as we only have access to a subset of the population whom are suspected
+    of having problems in the first place. This effectively skews the input distribution towards that of where
+    the average image contains anomalies, which would undermine our mission of detecting anomalies.
+
+    Future research
+    should prioritize eﬀorts to mitigate these biases and ensure accurate and precise
+    detection in diverse populations and imaging environments.
+
+    To avoid randomness, 10 whole runs were implemented on the K-CROSS validation
+    and the mean and standard deviation of the above three indicators (Sensitivity, specificity, Accuracy) were finally reported.
+
+    Q: Why plot up the effect of activation functions and numbers of layers on 2D, 3D graphs when you can just run a genetic algorithm?
+    Is the understanding here really necessary. I was hoping to make a more general approach that works for all without having rules based on experience. 
+    I prefer being able to build systems that build for me. 
+
+
+    Training methods:
+    Nesterov Momentum, AdaGrad [38], Newton’s method, Adam, etc.
+    Batch normalization?
+
+    Sick people:
+        Cortical thickness and regional volume relative to healthy people.
+
+
+        Supervised vs unsupervised
+        BIAS
+
+        Hva kan vi gjøre,
+            se på avstand/forskjell 
+        
+    https://fsl.fmrib.ox.ac.uk/fsl/docs/#/
+    https://foswiki.ux.uis.no/Info
+    https://gitlab.ux.uis.no/unix/gpu/-/tree/main?ref_type=heads
+    /home/prosjekt/brainMRI/prj/anodet/mri/CN_3T_T1_3D/bids
+
+    https://www.youtube.com/watch?v=VobRXk3ccNQ&list=PLIQIswOrUH69lUeHurAk9pLHOPTzQ6M72&index=2
+
+
+    ssh ssh1.ux.uis.no
+
+
+    Goals / Approaches:
+        1. Distance_loss(average normal brain, brain)
+            Yes you get a high loss on all images, but perhaps a bigger loss on the images that 
+            have problems.
+        2. Distance_loss(AE, brain)
+        3. Distance_loss(VAE, brain)
+        4. Distance_loss(GAN, brain)
+
+
+        Classification algorithms: 
+            0. Distance_loss(AE, brain) > threshold (for splitting the dataset in two only)
+            1. CNN
+            2. Random forest (RF) - displacement field
+            3. Hybridized firefly algorithm (FA) and probabilistic NN (PNN)
+            4. Particle swarm optimization (IPSO)
+            5. Support Vector Machines (SVM)
+            6. ROI (Region of interest)
+            7. 
+
+
+        Applicants were ex-cluded if mandarin is not their first language, if they were left-handed, or if they had HIV, epilepsy, stroke, Wernick
+        Korsakoff syndrome; bipolar; cirrhosis or liver failure, seizures unrelated to alcoholism, head injury with loss of consciousness more than 15 min unrelated to alcoholism,
+        depression, schizophrenia, and other psychotic disorders.
+        
+        To optimize the best autoencoder (Brute force, genetic algos)
+
+        y: Accuracy
+        x: Time
+
+        KL divergence.
+
+        
+        sub-ADNI002S0413
+        L ses-M132
+        L anat
+            L sub-ADNI002S0413_ses-M132_T1w.nii.gz
+        L sub-ADNI002S0413_ses-M132_scans.tsv
+        L ses-M162
+        L anat
+            L sub-ADNI002S0413_ses-M162_T1w.nii.gz
+        L sub-ADNI002S0413_ses-M162_scans.tsv
+        L sub-ADNI00250413 sessions.tsv
+
+        ppmi, oasis2
+
+        https://ida.loni.usc.edu/pages/access/search.jsp?tab=collection&project=ADNI&page=DOWNLOADS&subPage=IMAGE_COLLECTIONS
+
+        scp -r jonmhm@ssh1.ux.uis.no:/home/prosjekt/brainMRI/prj/anodet/mri/CN_3T_T1_3D/bids/ "C:\Users\jonmhm\ .."
+        scp -r vaakir@ssh1.ux.uis.no:/home/prosjekt/brainMRI/prj/anodet/mri/CN_3T_T1_3D/bids/ "C:\Users\jonmhm\ .."

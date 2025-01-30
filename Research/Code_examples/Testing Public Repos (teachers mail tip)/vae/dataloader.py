@@ -31,8 +31,8 @@ def save_data_to_csv(dir, z):
     pd.DataFrame(z).to_csv(dir, header=None, index=False)
 
 def load_mri_images(path, batch_size):
-    filenames = [i for i in os.listdir(path) if i.endswith(".nii")] #and i.startswith("norm_023_S_0030")
-    random.shuffle(filenames, random.random)
+    filenames = [i for i in os.listdir(path) if i.endswith(".nii.gz")] #and i.startswith("norm_023_S_0030")
+    random.shuffle(filenames)
     n = 0
     while n < len(filenames):
         batch_image = []
@@ -42,9 +42,12 @@ def load_mri_images(path, batch_size):
                 break
             #print(filenames[i])
             image = ni.load(os.path.join(path, filenames[i]))
+            
             image = np.array(image.dataobj)
             image = np.pad(image, ((1,0), (1,0), (1, 0)), "constant", constant_values=0)
             image = torch.Tensor(image)
+            
+            #image = torch.reshape(image, (1, 1) + image.shape)  # Keeps original shape if unknown
             image = torch.reshape(image, (1,1, 80, 96, 80))
             #image = (image - image.min()) / (image.max() - image.min())
             image = image / 255.
@@ -53,11 +56,15 @@ def load_mri_images(path, batch_size):
         batch_image = torch.cat(batch_image, axis=0)
         yield batch_image
 
-#################### TEST #################   
-# start = time.time()
-# for i in load_mri_images("./data", 2):
-#     print(time.time()-start)
-#     start = time.time()
-#     print(i.shape)
+        
+
+#################### TEST #################  
+#path = "C:/Users/kiran/Documents/_UIS/sem6/BACH/Data/_testfew/" 
+#start = time.time()
+#loaded = load_mri_images(path, 2)
+#for i in loaded:
+#    print(time.time()-start)
+#    start = time.time()
+#    print(i.shape)
 
 #split_train_test("/home/ubuntu/Desktop/DuyPhuong/VAE/data")
