@@ -1,0 +1,13 @@
+Metadata-Version: 2.2
+Name: imago
+Version: 0.1.0
+Summary: A Python module for reading and operating on MRI scans
+License: MIT
+Keywords: MRI,medical imaging,analysis,image processing
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Dynamic: requires-python
