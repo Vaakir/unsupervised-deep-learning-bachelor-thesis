@@ -1,7 +1,15 @@
 from tensorflow.keras import layers, Model, activations
 
 class AE:
-    def __init__(self, input_shape, halvings=2, latent_dim=10_000, output_activation="tanh", hidden_activation=activations.leaky_relu):
+    def __init__(
+            self,
+            input_shape,
+            halvings=2,
+            init_hidden_depth=8,
+            latent_dim=10_000,
+            output_activation="tanh",
+            hidden_activation=activations.leaky_relu
+            ):
         
         shape_changed=False
         if input_shape[-1]>3:
@@ -14,32 +22,31 @@ class AE:
 
         # Encoder
         encoder_input = x = layers.Input(shape=input_shape)
+        depth = init_hidden_depth
         for _ in range(halvings):
-            x = layers.Conv3D(10, (3, 3, 3), strides=2, activation=hidden_activation, padding="same")(x)
+            x = layers.Conv3D(depth, (3, 3, 3), strides=2, activation=hidden_activation, padding="same")(x)
             x = layers.Dropout(0.05)(x)
-        # encoded = layers.Conv3D(8, (3, 3, 3), activation=hidden_activation, padding="same")(x)  # Latent space
+            depth <<= 1
+
+        # Flatten the latent space
         pre_flatten_shape = x.shape
         print(f"Pre-flattened latent shape: {pre_flatten_shape}")
         x = layers.Flatten()(x)
-        encoded = layers.Dense(latent_dim, activation="relu")(x)  # Latent space
-        self.encoder = Model(encoder_input, encoded, name="encoder")
-
+        encoded = layers.Dense(latent_dim, activation="relu")(x)
         self.encoder = Model(encoder_input, encoded, name="encoder")
 
         # Decoder
         decoder_input = x = layers.Input(shape=encoded.shape[1:])  # Adjusted latent space shape
         
+        # Reshape back to 3D
         x = layers.Dense(pre_flatten_shape[1] * pre_flatten_shape[2] * pre_flatten_shape[3]* pre_flatten_shape[4], activation="relu")(decoder_input)
-
-        # Reshape back to 3D volume
         x = layers.Reshape(pre_flatten_shape[1:])(x)
         
         for _ in range(halvings):
-            x = layers.Conv3D(10, (3, 3, 3), activation=hidden_activation, padding="same")(x)
+            depth >>= 1
+            x = layers.Conv3D(depth, (3, 3, 3), activation=hidden_activation, padding="same")(x)
             x = layers.UpSampling3D((2, 2, 2))(x)  # Single upscale block
-
-        decoded = layers.Conv3D(1, (3, 3, 3), activation=output_activation, padding="same")(x)  # Final output layer
-
+        decoded = layers.Conv3D(1, (3, 3, 3), activation=output_activation, padding="same")(x)
         self.decoder = Model(decoder_input, decoded, name="decoder")
 
         # Full Autoencoder (combine encoder and decoder)

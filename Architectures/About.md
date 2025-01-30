@@ -1,0 +1,1 @@
+All models defined are to be written in TensorFlow Keras, and should implement the methods `train`, `encode` and `decode`.
