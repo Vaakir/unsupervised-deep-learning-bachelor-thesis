@@ -1,4 +1,4 @@
-from tensorflow.keras import layers, Model, activations
+from tensorflow.keras import layers, Model, activations, regularizers
 
 class AE:
     def __init__(
@@ -8,7 +8,8 @@ class AE:
             init_hidden_depth=8,
             latent_dim=10_000,
             output_activation="tanh",
-            hidden_activation=activations.leaky_relu
+            hidden_activation=activations.leaky_relu,
+            l1_lambda=0.0000001  # L1 regularization factor
             ):
         
         shape_changed=False
@@ -32,14 +33,18 @@ class AE:
         pre_flatten_shape = x.shape
         print(f"Pre-flattened latent shape: {pre_flatten_shape}")
         x = layers.Flatten()(x)
-        encoded = layers.Dense(latent_dim, activation="relu")(x)
+        encoded = layers.Dense(latent_dim, activation="relu", kernel_regularizer=regularizers.l1(l1_lambda))(x)
         self.encoder = Model(encoder_input, encoded, name="encoder")
 
         # Decoder
         decoder_input = x = layers.Input(shape=encoded.shape[1:])  # Adjusted latent space shape
         
         # Reshape back to 3D
-        x = layers.Dense(pre_flatten_shape[1] * pre_flatten_shape[2] * pre_flatten_shape[3]* pre_flatten_shape[4], activation="relu")(decoder_input)
+        x = layers.Dense(
+            pre_flatten_shape[1] * pre_flatten_shape[2] * pre_flatten_shape[3] * pre_flatten_shape[4],
+            activation="relu",
+            kernel_regularizer=regularizers.l1(l1_lambda)
+        )(decoder_input)
         x = layers.Reshape(pre_flatten_shape[1:])(x)
         
         for _ in range(halvings):
