@@ -1,4 +1,7 @@
 
-/Data
 /Research/Code examples/data
 /Research/Code_examples/data
+/Data/__pycache__
+/Data/**/*.png
+/Data/**/*.csv
+/Data/**/*.nii.gz
