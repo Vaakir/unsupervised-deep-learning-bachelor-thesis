@@ -160,7 +160,7 @@ def generator(inp_shape, trainable = True):
    
    xc1=Conv2D(filters=fd,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(lay_8dn) #8x8
    xrrd=xc1
-   for m in range(nb):
+   for _ in range(nb):
      xrrd=super_resnet_block(fd,gr,betad,betar,gamma_init,trainable)(xrrd)
         
    xc2=Conv2D(filters=fd,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(xrrd)
