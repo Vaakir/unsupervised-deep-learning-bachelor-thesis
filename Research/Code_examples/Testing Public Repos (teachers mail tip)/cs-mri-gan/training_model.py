@@ -3,14 +3,12 @@ import numpy as np
 import tensorflow as tf
 import pickle
 from keras.models import Model, Input
-from keras.optimizers import Adam, RMSprop
-from keras.layers import Dense
+from keras.optimizers import Adam
 from keras.layers import Conv2D, Conv2DTranspose
-from keras.layers import Flatten, Add
+from keras.layers import Add
 from keras.layers import Concatenate, Activation
 from keras.layers import LeakyReLU, BatchNormalization, Lambda
 from keras import backend as K
-import os
 
 
 def accw(y_true, y_pred):
@@ -29,7 +27,7 @@ def discriminator(inp_shape = (256,256,1), trainable = True):
     
     gamma_init = tf.random_normal_initializer(1., 0.02)
     
-    inp = Input(shape = (256,256,1))
+    inp = Input(shape = inp_shape)
     
     l0 = Conv2D(64, (4,4), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(inp) #b_init is set to none, maybe they are not using bias here, but I am.
     l0 = LeakyReLU(alpha=0.2)(l0)
@@ -82,46 +80,64 @@ def discriminator(inp_shape = (256,256,1), trainable = True):
     model = Model(inputs = inp, outputs = out)
     return model
 
-def resden(x,fil,gr,beta,gamma_init,trainable):    
-    x1=Conv2D(filters=gr,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(x)
-    x1=BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(x1)
-    x1=LeakyReLU(alpha=0.2)(x1)
-    
-    x1=Concatenate(axis=-1)([x,x1])
-    
-    x2=Conv2D(filters=gr,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(x1)
-    x2=BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(x2)
-    x2=LeakyReLU(alpha=0.2)(x2)
-
-    x2=Concatenate(axis=-1)([x1,x2])
+def resnet_block(fil,gr,beta,gamma_init,trainable):
+    def callable(x):
+        x1=Conv2D(filters=gr,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(x)
+        x1=BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(x1)
+        x1=LeakyReLU(alpha=0.2)(x1)
         
-    x3=Conv2D(filters=gr,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(x2)
-    x3=BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(x3)
-    x3=LeakyReLU(alpha=0.2)(x3)
+        x1=Concatenate(axis=-1)([x,x1])
+        
+        x2=Conv2D(filters=gr,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(x1)
+        x2=BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(x2)
+        x2=LeakyReLU(alpha=0.2)(x2)
 
-    x3=Concatenate(axis=-1)([x2,x3])
-    
-    x4=Conv2D(filters=gr,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(x3)
-    x4=BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(x4)
-    x4=LeakyReLU(alpha=0.2)(x4)
+        x2=Concatenate(axis=-1)([x1,x2])
+            
+        x3=Conv2D(filters=gr,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(x2)
+        x3=BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(x3)
+        x3=LeakyReLU(alpha=0.2)(x3)
 
-    x4=Concatenate(axis=-1)([x3,x4])
-    
-    x5=Conv2D(filters=fil,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(x4)
-    x5=Lambda(lambda x:x*beta)(x5)
-    xout=Add()([x5,x])
-    
-    return xout
+        x3=Concatenate(axis=-1)([x2,x3])
+        
+        x4=Conv2D(filters=gr,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(x3)
+        x4=BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(x4)
+        x4=LeakyReLU(alpha=0.2)(x4)
 
-def resresden(x,fil,gr,betad,betar,gamma_init,trainable):
-    x1=resden(x,fil,gr,betad,gamma_init,trainable)
-    x2=resden(x1,fil,gr,betad,gamma_init,trainable)
-    x3=resden(x2,fil,gr,betad,gamma_init,trainable)
-    x3=Lambda(lambda x:x*betar)(x3)
-    xout=Add()([x3,x])
-    
-    return xout
+        x4=Concatenate(axis=-1)([x3,x4])
+        
+        x5=Conv2D(filters=fil,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(x4)
+        x5=Lambda(lambda x:x*beta)(x5)
+        xout=Add()([x5,x])
+        
+        return xout
+    return callable
 
+def super_resnet_block(fil,gr,betad,betar,gamma_init,trainable):
+    def callable(x):
+        x1=resnet_block(fil,gr,betad,gamma_init,trainable)(x)
+        x2=resnet_block(fil,gr,betad,gamma_init,trainable)(x1)
+        x3=resnet_block(fil,gr,betad,gamma_init,trainable)(x2)
+        x3=Lambda(lambda x:x*betar)(x3)
+        xout=Add()([x3,x])
+        return xout
+    return callable
+
+def norm_conv_block(depth=128, k=4, leaky=0.2, trainable=True):
+    def callable(input):
+        x = Conv2D(depth, (k,k), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(input)
+        x = BatchNormalization(trainable = trainable)(x)
+        x = LeakyReLU(alpha = leaky)(x)
+        return x
+    return callable
+
+def norm_convt_block(depth=128, k=4, trainable=True):
+    def callable(input):
+        x = Conv2DTranspose(depth, (k,k), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(input)
+        x = BatchNormalization(trainable = trainable)(x)
+        x = Activation('relu')(x)
+        return x
+    return callable
 
 def generator(inp_shape, trainable = True):
    gamma_init = tf.random_normal_initializer(1., 0.02)
@@ -135,61 +151,34 @@ def generator(inp_shape, trainable = True):
    inp_real_imag = Input(inp_shape)
    lay_128dn = Conv2D(64, (4,4), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(inp_real_imag)
    
-   lay_128dn = LeakyReLU(alpha = 0.2)(lay_128dn)
+   x = LeakyReLU(alpha = 0.2)(lay_128dn)
     
-   lay_64dn = Conv2D(128, (4,4), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(lay_128dn)
-   lay_64dn = BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(lay_64dn)
-   lay_64dn = LeakyReLU(alpha = 0.2)(lay_64dn)
-    
-   lay_32dn = Conv2D(256, (4,4), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(lay_64dn)
-   lay_32dn = BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(lay_32dn)
-   lay_32dn = LeakyReLU(alpha=0.2)(lay_32dn)
-    
-   lay_16dn = Conv2D(512, (4,4), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(lay_32dn)
-   lay_16dn = BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(lay_16dn)
-   lay_16dn = LeakyReLU(alpha=0.2)(lay_16dn)  #16x16 
-    
-   lay_8dn = Conv2D(512, (4,4), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(lay_16dn)
-   lay_8dn = BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(lay_8dn)
-   lay_8dn = LeakyReLU(alpha=0.2)(lay_8dn) #8x8
-
-
+   lay_64dn = norm_conv_block(128, 4)(x) # 64
+   lay_32dn = norm_conv_block(256, 4)(x) # 32
+   lay_16dn = norm_conv_block(512, 4)(x) # 16
+   lay_8dn = norm_conv_block(512, 4)(x) # 8
+   
    xc1=Conv2D(filters=fd,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(lay_8dn) #8x8
    xrrd=xc1
    for m in range(nb):
-     xrrd=resresden(xrrd,fd,gr,betad,betar,gamma_init,trainable)
+     xrrd=super_resnet_block(fd,gr,betad,betar,gamma_init,trainable)(xrrd)
         
    xc2=Conv2D(filters=fd,kernel_size=3,strides=1,padding='same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(xrrd)
    lay_8upc=Add()([xc1,xc2])
 
-   lay_16up = Conv2DTranspose(1024, (4,4), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(lay_8upc)
-   lay_16up = BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(lay_16up)
-   lay_16up = Activation('relu')(lay_16up) #16x16
-    
+   lay_16up = norm_convt_block(1024, 4)(lay_8upc) #16x16
    lay_16upc = Concatenate(axis = -1)([lay_16up,lay_16dn])
     
-   lay_32up = Conv2DTranspose(256, (4,4), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(lay_16upc) 
-   lay_32up = BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(lay_32up)
-   lay_32up = Activation('relu')(lay_32up) #32x32
-    
+   lay_32up = norm_convt_block(256, 4)(lay_16upc) #32x32
    lay_32upc = Concatenate(axis = -1)([lay_32up,lay_32dn])
      
-   lay_64up = Conv2DTranspose(128, (4,4), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(lay_32upc)
-   lay_64up = BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(lay_64up)
-   lay_64up = Activation('relu')(lay_64up) #64x64
-    
+   lay_64up = norm_convt_block(128, 4)(lay_32upc) #64x64
    lay_64upc = Concatenate(axis = -1)([lay_64up,lay_64dn])
      
-   lay_128up = Conv2DTranspose(64, (4,4), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(lay_64upc)
-   lay_128up = BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(lay_128up)
-   lay_128up = Activation('relu')(lay_128up) #128x128
-    
+   lay_128up = norm_convt_block(64, 4)(lay_64upc) #128x128
    lay_128upc = Concatenate(axis = -1)([lay_128up,lay_128dn])
      
-   lay_256up = Conv2DTranspose(64, (4,4), strides = (2,2), padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(lay_128upc)
-   lay_256up = BatchNormalization(gamma_initializer = gamma_init, trainable = trainable)(lay_256up)
-   lay_256up = Activation('relu')(lay_256up) #256x256
-    
+   lay_256up = norm_convt_block(lay_128upc) #256x256
    out =  Conv2D(1, (1,1), strides = (1,1), activation = 'tanh', padding = 'same', use_bias = True, kernel_initializer = 'he_normal', bias_initializer = 'zeros')(lay_256up)
 
    model = Model(inputs = inp_real_imag, outputs = out)
@@ -197,7 +186,6 @@ def generator(inp_shape, trainable = True):
    return model
 
 def define_gan_model(gen_model, dis_model, inp_shape):
-        
     dis_model.trainable = False
     inp = Input(shape = inp_shape)
     out_g = gen_model(inp)
@@ -208,13 +196,11 @@ def define_gan_model(gen_model, dis_model, inp_shape):
     return model
     
 def train(g_par, d_par, gan_model, dataset_real, u_sampled_data,  n_epochs, n_batch, n_critic, clip_val, n_patch, f):
-    
     bat_per_epo = int(dataset_real.shape[0]/n_batch)
     half_batch = int(n_batch/2)
     
     for i in range(n_epochs):
         for j in range(bat_per_epo):
-            
             # training the discriminator
             for k in range(n_critic):
                 ix = np.random.randint(0, dataset_real.shape[0], half_batch)
@@ -233,8 +219,8 @@ def train(g_par, d_par, gan_model, dataset_real, u_sampled_data,  n_epochs, n_ba
                     weights=l.get_weights()
                     weights=[np.clip(w, -clip_val,clip_val) for w in weights]
                     l.set_weights(weights)
+
             # training the generator
-            
             ix = np.random.randint(0, dataset_real.shape[0], n_batch)
             X_r = dataset_real[ix]
             X_gen_inp = u_sampled_data[ix]
@@ -296,12 +282,3 @@ f = open('/home/cs-mri-gan/log_a5.txt', 'x')
 f = open('/home/cs-mri-gan/log_a5.txt', 'a') 
 
 train(g_par, d_par, gan_model, dataset_real, u_sampled_data_2c, n_epochs, n_batch, n_critic, clip_val, n_patch, f)
-
-
-    
-  
-  
-       
-
-    
- 
