@@ -1,4 +1,6 @@
 from tensorflow.keras import layers, Model, activations, regularizers
+import tensorflow as tf
+import os
 
 class AE:
     def __init__(
@@ -80,3 +82,30 @@ class AE:
     def decode(self, y):
         """Decode latent space representation y into the original data space."""
         return self.decoder.predict(y)
+    
+    def save(self, path):
+        """Save the autoencoder, encoder, and decoder models to disk."""
+        os.makedirs(path, exist_ok=True)
+        self.autoencoder.save(os.path.join(path, "autoencoder.keras"))
+        self.encoder.save(os.path.join(path, "encoder.keras"))
+        self.decoder.save(os.path.join(path, "decoder.keras"))
+        print(f"Models saved to {path}")
+    
+    @staticmethod
+    def open(path):
+        """Load the autoencoder, encoder, and decoder models from disk."""
+        autoencoder = tf.keras.models.load_model(os.path.join(path, "autoencoder.keras"))
+        encoder = tf.keras.models.load_model(os.path.join(path, "encoder.keras"))
+        decoder = tf.keras.models.load_model(os.path.join(path, "decoder.keras"))
+
+        # Create an instance of AE without initializing models
+        ae = AE.__new__(AE)
+        ae.autoencoder = autoencoder
+        ae.encoder = encoder
+        ae.decoder = decoder
+
+        # Compile the loaded model manually
+        ae.autoencoder.compile(loss='mean_squared_error', optimizer='adam')
+
+        print("Models loaded and compiled successfully.")
+        return ae

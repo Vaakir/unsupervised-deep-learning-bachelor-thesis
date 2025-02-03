@@ -5,3 +5,6 @@
 /Data/**/*.png
 /Data/**/*.csv
 /Data/**/*.nii.gz
+*.keras
+*.pyc
+/Architectures/__pycache__
