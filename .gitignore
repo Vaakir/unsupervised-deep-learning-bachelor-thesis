@@ -8,3 +8,4 @@
 *.keras
 *.pyc
 /Architectures/__pycache__
+Data/pca_images.npy
