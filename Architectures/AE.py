@@ -64,16 +64,18 @@ class AE:
         # Compile the autoencoder
         self.autoencoder.compile(loss='mean_squared_error', optimizer='adam')
         self.autoencoder.summary()
+        
+        self.history = None
 
     def train(self, x_train, epochs=2, batch_size=16):
-        history = self.autoencoder.fit(
+        self.history = self.autoencoder.fit(
             x_train, x_train,
             epochs=epochs,
             batch_size=batch_size,
             shuffle=True,
             validation_split=0.2
         )
-        return history
+        return self.history
 
     def encode(self, x):
         """Encode input data x into its latent space representation."""
