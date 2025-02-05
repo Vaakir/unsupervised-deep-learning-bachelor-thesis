@@ -6,6 +6,7 @@
 - pca for å komprimere bildene uten tap av spatial informasjon (last inn data på 0.1s i stede for 1 min)
 - ae rekonstruere isje små feil me legge inn i bilde
 - laget metrics for å sammenligne bilde og rekonstruert uavhengig av lysstyrke. har også sett på SSIM osv.
+- fant ut mesteparten av infoen om hjernen er lagret i kantene dvs de små forskjellene i størrelse på hjernedeler. og åpenbart om hjernemassen er der eller ikke.
 
 - sleit me å få gan t å fungere. koss ska gan komprimere bildene t latent space?
 
@@ -18,5 +19,9 @@
   - [X] ______
 - 
 
-Spørsmål og svar:
-- 
+# Spørsmål og svar:
+- er klassiferere utenfor scopen?
+  - [X] ______
+- husk referanser!!
+
+Neste møte: onsdag kl 9
