@@ -1,7 +1,6 @@
-Dato: 5. feb
--------------
+### Dato: 5. feb
 
-Hva vi har gjort:
+# Forrige uke oppsummert:
 - loss invers prop med størrelsen på latent dim 
 - å ta vekk gjennomsnittet så ikke ut t å gjør encoding mer effektiv
 - pca for å komprimere bildene uten tap av spatial informasjon (last inn data på 0.1s i stede for 1 min)
@@ -10,11 +9,14 @@ Hva vi har gjort:
 
 - sleit me å få gan t å fungere. koss ska gan komprimere bildene t latent space?
 
-
-Hva vi skal gjøre:
+# Plan for uken:
 - gan modell med diffusjon via prompter modell?
   - en "prompter" modell lager en rekke tall fra et bilde (som en encoder)
   - en "generator" modell lager et bilde som svarer til prompten (encoded bilde)
+  - [X] ______
+- se på clustering med bruk av VAE
+  - [X] ______
+- 
 
-Spørsmål:
+Spørsmål og svar:
 - 
