@@ -17,7 +17,11 @@
   - [X] ______
 - se på clustering med bruk av VAE
   - [X] ______
-- 
+
+- sammenligne reconstruction loss for studiegrupper og folkegrupper og lag histogram
+- finne forskjell mellom de som får ad og de som forblir mci
+- se på gjennomsnittsforskjeller mellom ad og mci
+- sammenligne pca og gjennomsnitts-diff. vis effekt av pca i frekvensdomenet
 
 # Spørsmål og svar:
 - er klassiferere utenfor scopen?
