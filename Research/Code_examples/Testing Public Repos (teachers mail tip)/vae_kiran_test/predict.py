@@ -14,14 +14,15 @@ import matplotlib.pyplot as plt
 import model
 import loss
 import dataloader
+# import BACH.local.vae_kiran_w6.visualize as visualize
 import visualize
 ##---------Settings--------------------------
-batch_size = 32
+batch_size = 1
 ##############
 # path_data = "/home/ubuntu/Desktop/DuyPhuong/VAE/data/test"
 # path_model = "./checkpoint/vae_t1/model_vae_epoch_43.pt"
-path_data = "C:/Users/kiran/Documents/_UIS/sem6/BACH/Data/_testfew"
-path_model = "C:/Users/kiran/Documents/_UIS/sem6/BACH/Data/_test/test1.pt"
+path_data = "C:/Users/kiran/Documents/_UIS/sem6/BACH/Data/208"
+path_model = "C:/Users/kiran/Documents/_UIS/sem6/BACH/Data/_test/test5.pt"
 
 ####################
 verbose = True
@@ -38,7 +39,9 @@ print(" GPU is activated" if device else " CPU is activated")
 no_images = len(glob.glob(path_data + "/*.nii.gz"))
 print("Number of MRI images: ", no_images)
 if __name__=="__main__":
-    vae_model = torch.load(path_model)
+    # vae_model = torch.load(path_model)
+    vae_model = torch.load(path_model, weights_only=False)
+
     vae_model.to(device)
     #log(vae_model)
     loss_rec_batch, loss_KL_batch, total_loss_batch = 0, 0, 0
@@ -48,7 +51,7 @@ if __name__=="__main__":
     vae_model.eval()
     z = []
     with torch.no_grad():
-        for batch_images in dataloader.load_mri_images(path_data, batch_size):
+        for i, batch_images in enumerate(dataloader.load_mri_images(path_data, batch_size, downscale=3)):
             batch_images = batch_images.to(device)
             y, z_mean, z_log_sigma = vae_model(batch_images)
             z.append((z_mean + z_log_sigma.exp()*vae_model.epsilon).cpu().detach().numpy())
@@ -63,7 +66,10 @@ if __name__=="__main__":
             total_loss += total_loss_batch.item() * batch_images.shape[0]
 
             # display
-            #visualize.display_image(batch_images, y)
+            visualize.display_image(batch_images, y)
+            
+            # if i > 3:
+            break
     print("Reconstruct Loss: {:.4f} | KL Loss: {:.4f}".format(loss_rec/ no_images, loss_KL/ no_images))
     z = np.concatenate(z, axis=0)
     dataloader.save_data_to_csv("./latent_space_z.csv", z)
@@ -71,9 +77,11 @@ if __name__=="__main__":
 
 
 
-
-
-
            
+# Deep learning based anomaly detection for dementia characterization
+# Reasons: 
+# 1. Latent space collapse (KL loss is too dominant, only the case for the first (10-20) epochs)
+# b-VAE ()
+# 2. Variation in the train set (spatially normalized)
+# autoencoder (scale of task?)
 
-    

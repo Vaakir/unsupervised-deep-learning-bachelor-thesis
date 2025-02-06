@@ -20,6 +20,7 @@ class KLDivergence(nn.Module):
         #return (1/self.N) * ( (z_mean**2 + z_var**2 - z_log_var**2 - 1).sum() )
         return 0.5 * ((z_mean**2 + z_log_var.exp() - z_log_var - 1).sum())
 
+
 class L2Loss(nn.Module): 
     "Measuring the `Euclidian distance` between prediction and ground truh using `L2 Norm`"
     def __init__(self):

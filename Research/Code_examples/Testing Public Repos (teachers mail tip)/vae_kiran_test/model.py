@@ -315,10 +315,11 @@ class Encoder(nn.Module):
 
 class Decoder(nn.Module):
     "Decoder Module"
-    def __init__(self, latent_dim=128, encoder_shape_size = 256 * 13 * 15 * 16):
+    def __init__(self, latent_dim=128, encoder_shape_size = 256 * 13 * 15 * 16, first_out_shape=(-1, 256, 13, 15, 16)):
         super(Decoder, self).__init__()
 
         self.latent_dim = latent_dim
+        self.first_out_shape = first_out_shape
         self.linear_up = nn.Linear(latent_dim, encoder_shape_size)
         self.relu = nn.ReLU()
 
@@ -343,7 +344,7 @@ class Decoder(nn.Module):
         x4_ = self.linear_up(x)
         x4_ = self.relu(x4_)
 
-        x4_ = x4_.view(-1, 256, 13, 15, 16)
+        x4_ = x4_.view(self.first_out_shape)
         x4_ = self.upsize4(x4_)
         x4_ = self.res_block4(x4_)
 
@@ -359,33 +360,42 @@ class Decoder(nn.Module):
         return x1_
 
 class VAE(nn.Module):
-    def __init__(self, latent_dim=128):
+    def __init__(self, latent_dim=128, shape=(1, 1, 208, 240, 256)):
         super(VAE, self).__init__()
         self.latent_dim = latent_dim
+        
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')        
         #self.z_mean = nn.Linear( 256 * 13 * 15 * 16, latent_dim)
         #self.z_log_sigma = nn.Linear( 256 * 13 * 15 * 16, latent_dim)
         self.epsilon = torch.normal(size=(1, latent_dim), mean=0, std=1.0, device=self.device)
         
         self.encoder = Encoder()
-        self.decoder = Decoder(latent_dim)
-        
         #x = self.encoder(x)
         #x = torch.flatten(x, start_dim=1)
         #print(f"Actual flattened size during forward pass: {x.shape[1]}")  # Debugging
         # Now, instead of hardcoding, we calculate the output shape of the encoder
+        
         with torch.no_grad():
-            sample_input = torch.zeros(1, 1, 208, 240, 256)  # Adjust according to input shape
+            #sample_input = torch.zeros(1, 1, 208, 240, 256)  # Adjust according to input shape
+            sample_input = torch.zeros(shape)  # Adjust according to input shape
             self.first_out = self.encoder(sample_input)
+            self.first_out_shape = tuple(self.first_out.shape)  # Store the shape as a tuple
+            self.first_out_shape = (-1, *self.first_out_shape[1:])  # Set the first dimension to -1
+
             self.flattened_size = self.first_out.numel()  # calculate the flattened size
 
-        print(self.first_out.shape)
+        # print(shape, self.flattened_size, self.first_out_shape)
+        self.decoder = Decoder(latent_dim, encoder_shape_size=self.flattened_size, first_out_shape=self.first_out_shape)
+
+        # print(self.first_out.shape)
         # Create linear layers for z_mean and z_log_sigma dynamically
-        flattened_size = 256 * 13 * 15 * 16
-        self.z_mean = nn.Linear(flattened_size, latent_dim)
-        self.z_log_sigma = nn.Linear(flattened_size, latent_dim)
+        # flattened_size = 256 * 13 * 15 * 16
+        # self.flattened_size 
+        self.z_mean = nn.Linear(self.flattened_size, latent_dim)
+        self.z_log_sigma = nn.Linear(self.flattened_size, latent_dim)
         
         self.reset_parameters()
+
 
     def reset_parameters(self):
         for weight in self.parameters():
@@ -402,13 +412,22 @@ class VAE(nn.Module):
         return y, z_mean, z_log_sigma
 
     def forward(self, x):
+        # print(x.shape)
         x = self.encoder(x)
-        print(f"Shape after encoder: {x.shape}")  # Debugging
+        # print(f"Shape after encoder: {x.shape}")  # Debugging
         x = torch.flatten(x, start_dim=1)
-        print(f"Shape after flattening: {x.shape}")  # Debugging
+        # print(f"Shape after flattening: {x.shape}")  # Debugging
         z_mean = self.z_mean(x)
         z_log_sigma = self.z_log_sigma(x)
+
+        # change epsilon at each forwards pass?
+        # self.epsilon = torch.randn_like(z_mean)  # Generate random noise each time in forward pass
         z = z_mean + z_log_sigma.exp() * self.epsilon
         y = self.decoder(z)
         return y, z_mean, z_log_sigma
     
+
+        #reconstruction_loss = F.mse_loss(reconstructed_x, x)
+        #kl_loss = -0.5 * torch.mean(1 + z_log_sigma - z_mean.pow(2) - z_log_sigma.exp())
+
+        #loss = reconstruction_loss + beta * kl_loss
