@@ -488,14 +488,59 @@ Questions that popped up in my head:
 
 
         Classification algorithms: 
-            0. Distance_loss(AE, brain) > threshold (for splitting the dataset in two only)
-            1. CNN
-            2. Random forest (RF) - displacement field
-            3. Hybridized firefly algorithm (FA) and probabilistic NN (PNN)
-            4. Particle swarm optimization (IPSO)
-            5. Support Vector Machines (SVM)
-            6. ROI (Region of interest)
-            7. 
+            - Distance_loss(AE, brain) > threshold (for splitting the dataset in two only)
+            - CNN (latent space)
+            - Random forest (RF) - displacement field
+            - Hybridized firefly algorithm (FA) and probabilistic NN (PNN)
+            - Particle swarm optimization (IPSO)
+            - Support Vector Machines (SVM)
+            - ROI (Region of interes)
+            
+            Classification of alzheimers disease article:
+            - BRC (brain region cluster) + Bayes method (Plant, Teipel)
+            - TJM (Trade of Jacobian matrix) [5]
+            - BBO (Biogeography-based optimization) method [8]
+            - MVA (multi-variate approach) [9]
+            - PZM (Pseudo Zernike moment) [10]
+            - SCG (scaled conjugate method) (order of 30 is the best) [11]
+            - LRC (Linear regression classifier)
+
+
+            4. Plant, C. et al., Automated detection of brain atrophy patterns based on MRI for the prediction of Alzheimer's disease. NeuroImage. 50(1):162–174, 2010.
+            5. Savio, A., and Grana, M., Deformation based feature selection for
+            Computer Aided Diagnosis of Alzheimer's Disease. Expert Syst.
+            Appl. 40(5):1619–1628, 2013.
+            6. Gray, K. R. et al., Random forest-based similarity measures for
+            multi-modal classification of Alzheimer's disease. NeuroImage.
+            65:167–175, 2013.
+            7. Zhang, Y., Detection of Alzheimer's disease by displacement field
+            and machine learning. PeerJ. 3:Article ID. e1251, 2015.
+            8. Wang, S.-H., Single slice based detection for Alzheimer’s disease
+            via wavelet entropy and multilayer perceptron trained by
+            biogeography-based optimization. Multimed. Tools Appl., 2016.
+            https://doi.org/10.1007/s11042-016-4222-4.
+            9. Sun, J.-D., Multivariate Approach for Alzheimer's disease
+            Detection Using Stationary Wavelet Entropy and Predator-Prey
+            Particle Swarm Optimization. J. Alzheimers Dis., 2017. https://
+            doi.org/10.3233/JAD-170069.
+            10. Gorji, H. T., and Haddadnia, J., A novel method for early diagnosis
+            of Alzheimer's disease based on pseudo Zernike moment from
+            structural MRI. Neuroscience. 305:361–371, 2015.
+            11. Du, S., Alzheimer's Disease Detection by Pseudo Zernike Moment
+            and Linear Regression Classification. CNS Neurol. Disord. Drug
+            Targets. 16(1):11–15, 2017.
+            12. Raza, M. et al., Appearance based pedestrians' head pose and body
+            orientation estimation using deep learning. Neurocomputing. 272:
+            647–659, 2018.
+            13. Bach-Andersen, M., Romer-Odgaard, B., and Winther, O., Deep
+            learning for automated drivetrain fault detection. Wind Energy.
+            21(1):29–41, 2018.
+            14. Wei, G., Color Image Enhancement based on HVS and PCNN.
+            SCIENCE CHINA Inf. Sci. 53(10):1963–1976, 2010.
+            15. Wu, L. N., Segment-based coding of color images. Sci. China Ser.
+            F-Inf. Sci. 52(6):914–925, 2009.
+            16. Wu, L. N., Improved image filter based on SPCNN. Sci. China Ser.
+            F-Inf. Sci. 51(12):2115–2125, 2008.
 
 
         Applicants were ex-cluded if mandarin is not their first language, if they were left-handed, or if they had HIV, epilepsy, stroke, Wernick
