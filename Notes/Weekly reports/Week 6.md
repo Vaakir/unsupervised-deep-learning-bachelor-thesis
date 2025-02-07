@@ -22,10 +22,11 @@
 - finne forskjell mellom de som får ad og de som forblir mci
 - se på gjennomsnittsforskjeller mellom ad og mci
 - sammenligne pca og gjennomsnitts-diff. vis effekt av pca i frekvensdomenet
+- se om høyfrekvens signal kan gi utslag i reconstruction loss: siden AE har en lowpass-effekt, vil bilder med mer støy se "sykere" ut enn bilder med lite støy. Henger sammen med at $\epsilon-blur(\epsilon) \approx \epsilon$.
 
 # Spørsmål og svar:
 - er klassiferere utenfor scopen?
-  - [X] ______
+  - [X] i første omgang skal klassifisering ikke være med, men kan være kjekt å ta med for å vise at encodingen fungerer og finne merkverdige forskjeller i latent space mellom grupper.
 - husk referanser!!
 
 Neste møte: onsdag kl 9
