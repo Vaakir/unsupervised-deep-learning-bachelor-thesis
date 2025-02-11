@@ -1,6 +1,7 @@
 import os
 from sklearn.decomposition import PCA as PCALayer
 import numpy as np
+import pickle
 
 class PCA:
     def __init__(
@@ -63,14 +64,39 @@ class PCA:
             x = np.stack([self.upscale(im, self.downscale_layers[i],self.layer_depths1[i]) for im in x])
         return x
     
+
     def save(self, path):
-        """Save the pca model to disk."""
+        """Save the PCA model to disk."""
         os.makedirs(path, exist_ok=True)
-        print(f"Models saved to {path}")
+        model_data = {
+            'kernel_size': self.kernel_size,
+            'stride': self.stride,
+            'layer_depths': self.layer_depths,
+            'layer_depths1': self.layer_depths1,
+            'downscale_layers': self.downscale_layers
+        }
+        with open(os.path.join(path, "pca_model.pkl"), "wb") as f:
+            pickle.dump(model_data, f)
+        print(f"Model saved to {path}")
     
     @staticmethod
     def open(path):
-        pass
+        """Load the PCA model from disk."""
+        model_file = os.path.join(path, "pca_model.pkl")
+        if not os.path.exists(model_file):
+            raise FileNotFoundError(f"No saved model found in {path}")
+        with open(model_file, "rb") as f:
+            model_data = pickle.load(f)
+        
+        pca_instance = PCA(input_shape=(0, 0, 0))  # Dummy shape to initialize
+        pca_instance.kernel_size = model_data['kernel_size']
+        pca_instance.stride = model_data['stride']
+        pca_instance.layer_depths = model_data['layer_depths']
+        pca_instance.layer_depths1 = model_data['layer_depths1']
+        pca_instance.downscale_layers = model_data['downscale_layers']
+        
+        print(f"Model loaded from {path}")
+        return pca_instance
     
     def wnd_from(self,train):
         windows = []

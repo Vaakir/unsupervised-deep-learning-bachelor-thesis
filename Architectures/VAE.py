@@ -1,15 +1,13 @@
 import os
-from tensorflow.keras import layers, Model, activations, regularizers, backend as K, ops, losses
+import pickle
+from tensorflow.keras import layers, Model, activations, backend as K, ops, losses
 import tensorflow as tf
-
-
-os.environ["KERAS_BACKEND"] = "tensorflow"
-
 import numpy as np
-import tensorflow as tf
 import keras
 from keras import ops
 from keras import layers, Model, activations
+
+os.environ["KERAS_BACKEND"] = "tensorflow"
 
 class Sampling(layers.Layer):
     def call(self, inputs):
@@ -18,7 +16,6 @@ class Sampling(layers.Layer):
         dim = tf.shape(mu)[1]
         epsilon = tf.random.normal(shape=(batch, dim))
         return mu + tf.exp(0.5 * logvar) * epsilon
-
 
 class VAE(keras.Model):
     def __init__(
@@ -79,3 +76,32 @@ class VAE(keras.Model):
         kl_loss = -0.5 * tf.reduce_sum(1 + logvar - tf.square(mu) - tf.exp(logvar))*self.lambda_
         self.add_loss(kl_loss)
         return reconstructed
+    
+    def save(self, path):
+        """Save the VAE model to disk."""
+        os.makedirs(path, exist_ok=True)
+        model_data = {
+            'encoder': self.encoder.get_config(),
+            'decoder': self.decoder.get_config(),
+            'lambda_': self.lambda_
+        }
+        with open(os.path.join(path, "vae_model.pkl"), "wb") as f:
+            pickle.dump(model_data, f)
+        print(f"Model saved to {path}")
+    
+    @staticmethod
+    def open(path):
+        """Load the VAE model from disk."""
+        model_file = os.path.join(path, "vae_model.pkl")
+        if not os.path.exists(model_file):
+            raise FileNotFoundError(f"No saved model found in {path}")
+        with open(model_file, "rb") as f:
+            model_data = pickle.load(f)
+        
+        vae_instance = VAE(input_shape=(0, 0, 0))  # Dummy shape to initialize
+        vae_instance.encoder = Model.from_config(model_data['encoder'])
+        vae_instance.decoder = Model.from_config(model_data['decoder'])
+        vae_instance.lambda_ = model_data['lambda_']
+        
+        print(f"Model loaded from {path}")
+        return vae_instance
