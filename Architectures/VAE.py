@@ -78,30 +78,22 @@ class VAE(keras.Model):
         return reconstructed
     
     def save(self, path):
-        """Save the VAE model to disk."""
+        """Save the VAE model, encoder, and decoder to disk."""
         os.makedirs(path, exist_ok=True)
-        model_data = {
-            'encoder': self.encoder.get_config(),
-            'decoder': self.decoder.get_config(),
-            'lambda_': self.lambda_
-        }
-        with open(os.path.join(path, "vae_model.pkl"), "wb") as f:
-            pickle.dump(model_data, f)
-        print(f"Model saved to {path}")
+        self.encoder.save(os.path.join(path, "encoder.keras"))
+        self.decoder.save(os.path.join(path, "decoder.keras"))
+        print(f"Models saved to {path}")
     
     @staticmethod
     def open(path):
-        """Load the VAE model from disk."""
-        model_file = os.path.join(path, "vae_model.pkl")
-        if not os.path.exists(model_file):
-            raise FileNotFoundError(f"No saved model found in {path}")
-        with open(model_file, "rb") as f:
-            model_data = pickle.load(f)
+        """Load the VAE model, encoder, and decoder from disk."""
+        encoder = tf.keras.models.load_model(os.path.join(path, "encoder.keras"), custom_objects={'Sampling': Sampling})
+        decoder = tf.keras.models.load_model(os.path.join(path, "decoder.keras"))
         
-        vae_instance = VAE(input_shape=(0, 0, 0))  # Dummy shape to initialize
-        vae_instance.encoder = Model.from_config(model_data['encoder'])
-        vae_instance.decoder = Model.from_config(model_data['decoder'])
-        vae_instance.lambda_ = model_data['lambda_']
+        # Create an instance of VAE without initializing models
+        vae = VAE.__new__(VAE)
+        vae.encoder = encoder
+        vae.decoder = decoder
         
-        print(f"Model loaded from {path}")
-        return vae_instance
+        print("Models loaded successfully.")
+        return vae

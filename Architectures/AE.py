@@ -7,7 +7,9 @@ class AE:
             self,
             input_shape,
             halvings=2,
-            init_hidden_depth=8,
+            init_hidden_depth:int=8,
+            hidden_depth_grow_factor:int=2,
+
             latent_dim=10_000,
             output_activation="tanh",
             hidden_activation=activations.leaky_relu,
@@ -29,7 +31,7 @@ class AE:
         for _ in range(halvings):
             x = layers.Conv3D(depth, (3, 3, 3), strides=2, activation=hidden_activation, padding="same")(x)
             x = layers.Dropout(0.05)(x)
-            depth <<= 1
+            depth *= hidden_depth_grow_factor
 
         # Flatten the latent space
         pre_flatten_shape = x.shape
@@ -50,7 +52,7 @@ class AE:
         x = layers.Reshape(pre_flatten_shape[1:])(x)
         
         for _ in range(halvings):
-            depth >>= 1
+            depth //= hidden_depth_grow_factor
             x = layers.Conv3D(depth, (3, 3, 3), activation=hidden_activation, padding="same")(x)
             x = layers.UpSampling3D((2, 2, 2))(x)  # Single upscale block
         decoded = layers.Conv3D(1, (3, 3, 3), activation=output_activation, padding="same")(x)
@@ -67,9 +69,10 @@ class AE:
         
         self.history = None
 
-    def train(self, x_train, epochs=2, batch_size=16):
+    def train(self, x_train, epochs=2, batch_size=16,verbose=True):
         self.history = self.autoencoder.fit(
             x_train, x_train,
+            verbose=verbose,
             epochs=epochs,
             batch_size=batch_size,
             shuffle=True,

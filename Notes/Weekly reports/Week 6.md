@@ -16,7 +16,7 @@
   - en "generator" modell lager et bilde som svarer til prompten (encoded bilde)
   - [X] ______
 - se på clustering med bruk av VAE
-  - [X] ______
+  - [X] mye bedre enn AE. må bruke varierende reg styrke basert på hvor mange latent dims du har. ref [test_vae](../../test_vae.ipynb)
 
 - sammenligne reconstruction loss for studiegrupper og folkegrupper og lag histogram
 - finne forskjell mellom de som får ad og de som forblir mci
