@@ -12,5 +12,5 @@ Week6 total (30h)
 - 11. feb 08:00 - 16:00 (8h)    # python packet bug, preprocessing
 - 12. feb 09:00 - 10:00 (1h)    # meeting
 - 13. feb 08:00 - 10:00, 12:10 - 15:50, 18:00-20:30 (8h) #preprocessing
-- 14. feb 07:30 - 15:30 (8h)    # preprocessing, modifiable/adjustable AE
-week7 total (30h)
+- 14. feb 07:30 - 17:00 (9.5h)  # preprocessing, modifiable/adjustable AE
+week7 total (31.5h)
