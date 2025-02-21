@@ -4,6 +4,7 @@ import nibabel as nib
 from tqdm import tqdm
 from scipy.ndimage import zoom
 import os
+from tensorflow.keras import utils
 
 def load(
         dataset_name:str = "Pre-processed",
@@ -12,7 +13,8 @@ def load(
         #subvoxel_rolling_augmentation:bool = True,
         target_size:tuple|None = (80,96,80),
         train_test_split:float = 0.9,
-        take:int=-1
+        take:int=-1,
+        subdirs=[]
         ):
     """
     :params:
@@ -24,7 +26,34 @@ def load(
     - take: How many images to load. Set to -1 to load all the images in the dataset.
     """
     #- subvoxel_rolling_augmentation: If True: rolls the images around some times, producing a richer dataset.
-    
+    if len(subdirs) > 0:
+        x_train = []
+        x_test = []
+        y_train = []
+        y_test = []
+        for i, group in enumerate(subdirs):
+            data = load(
+                f"{dataset_name}/{group}",
+                crop,
+                normalize,
+                target_size,
+                train_test_split,
+                take
+                )
+            if len(data) == 2:
+                x_train.extend(data[0])
+                x_test.extend(data[1])
+                y_train.extend([i]*len(data[0]))
+                y_test.extend([i]*len(data[1]))
+            else:
+                x_train.extend(data)
+                y_train.extend([i]*len(data))
+
+        y_train = utils.to_categorical(y_train)
+        y_test = utils.to_categorical(y_test)
+        x_train = np.stack(x_train)
+        x_test = np.stack(x_test)
+        return x_train, y_train, x_test, y_test
     
     script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of this script
     dataset_path = os.path.join(script_dir, dataset_name)  # Create the absolute path
@@ -62,7 +91,8 @@ def load(
 
         return [img]
     
-    for file in tqdm(files,"Loading images"):
+    desc = f"Loading {dataset_name.split('/')[-1]}"
+    for file in tqdm(files, desc):
         img = nib.load(file).get_fdata()
         images.extend(handle_image(img))
 
