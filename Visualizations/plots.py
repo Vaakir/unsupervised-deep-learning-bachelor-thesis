@@ -129,8 +129,16 @@ def compare_models_reconstruction(brain_scan_id, models_list, test, loss):
         else:            
             latent = m.encode(test)
         recon = m.decode(latent)
-        input_image = np.rot90(test[brain_scan_id][40].reshape((96, 80)))
-        recon_image = np.rot90(recon[brain_scan_id][40])[:,:,0] # recon shape is 3dim we need -> 2d
+
+        if len(test.shape) == 3: # 2d images
+            input_image = np.rot90(test[brain_scan_id])
+            recon_image = np.rot90(recon[brain_scan_id][:,:,0])
+            print(input_image.shape, recon_image.shape)
+        if len(test.shape) == 4: # 3d images
+            input_image = np.rot90(test[brain_scan_id][40].reshape((96, 80)))
+            recon_image = np.rot90(recon[brain_scan_id][40])[:,:,0] # recon shape is 3dim we need -> 2d
+            print("ok", input_image.shape, recon_image.shape)
+
         diff_image = input_image - recon_image
         images.extend([input_image, recon_image, diff_image])
         titles.extend([
