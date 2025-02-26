@@ -9,9 +9,11 @@
 ![img](../../Plots/ae_latent_dim_comparison.png)
 
 # Plan for uken:
-- [ ] finne ut hvor mange hidden dims som må være med i hvert conv lag.
+- [X] finne ut hvor mange hidden dims som må være med i hvert conv lag.
+  - Virker som (16, 32, 64) fungerer bra ved 256 latent space variabler. Exploding gradients ødelegger når vi trener med flere parametre.
 - [ ] prøve å endre regulariserings-vektene mens vi trener.
-- [ ] teste modellene på de forskjellige gruppene.
+- [X] teste modellene på de forskjellige gruppene.
+  - Vi observerer svak clustering.
 - [ ] se hvilke hjernedeler som har mest reconstruction loss --> lage en pipeline som tar inn MRI scan og gir ut highlighta plot av ROI med mest loss.
 - [ ] teste histogram normalisering --> kan hende det gjør bildene lettere å memorisere.
 - [ ] teste data augmentation
