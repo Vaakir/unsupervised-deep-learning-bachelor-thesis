@@ -17,8 +17,9 @@ week7 total (31.5h)
 
 - 17. feb 10:00 - 16:00 (8h)
 - 20. feb 11:00 - 15:00 (4h) # Making the AE adjustable work for 2D images
-- 21. feb 08:00 - 17:00 (9h) # Testing mroe models on 2D images, and making plot_multiple_datasets(latent_space) work for 2D images.
+- 21. feb 08:00 - 17:00 (9h) # Testing more models on 2D images, and making plot_multiple_datasets(latent_space) work for 2D images.
 Week8 total (21h)
 
 - 24. feb 10:00 - 16:30 (6.5h) # Testing/exploring public repositories as my approach doesnt seem to yield results
-- 25. feb 09:00 - 17:00 (8h)   # Testing/exploring public repositories
+- 25. feb 09:00 - 17:00 (8h)   # Testing/exploring public repositories, first successfull separated clustering
+- 27. feb 08:15 - 10:00, 12:00 - 16:00 # ()

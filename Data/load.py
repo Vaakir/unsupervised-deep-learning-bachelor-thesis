@@ -107,6 +107,7 @@ def load(
 
 def load_middle_slices(
         dataset_name: str = "Pre-processed",  # Now takes the full dataset path instead of constructing it
+        axis=["sagittal","axial","coronal"][0],
         crop: bool = True,
         normalize: bool = True,
         target_size: tuple | None = (80, 96),  # Only height and width since we extract a 2D slice
@@ -142,9 +143,10 @@ def load_middle_slices(
             )
             img = img[x_min-2:x_max+3, y_min-2:y_max+3, z_min-2:z_max+3]
 
-        # Extract middle sagittal slice (x-axis)
-        middle_x = img.shape[0] // 2
-        img = img[middle_x, :, :]
+        # Extract middle slice (x-axis)
+        axes = {"sagittal": 0, "coronal": 1, "axial": 2}
+        middle_x = img.shape[axes[axis]] // 2
+        img = img.take(middle_x, axis=axes[axis])
 
         if normalize:
             q2m = .785700 / .475665
