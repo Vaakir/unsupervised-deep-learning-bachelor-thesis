@@ -22,4 +22,4 @@ Week8 total (21h)
 
 - 24. feb 10:00 - 16:30 (6.5h) # Testing/exploring public repositories as my approach doesnt seem to yield results
 - 25. feb 09:00 - 17:00 (8h)   # Testing/exploring public repositories, first successfull separated clustering
-- 27. feb 08:15 - 10:00, 12:00 - 16:00 # ()
+- 27. feb 08:00 - 16:00 (8h) 
