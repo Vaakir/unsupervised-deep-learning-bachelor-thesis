@@ -18,4 +18,4 @@ def classifier_test(ae, x_train, y_train, x_test, y_test):
     model.compile(loss="mse", optimizer="adam")
     model.fit(x_train, y_train, epochs = 100, verbose = False)
     y_pred = model.predict(x_test)
-    plot_confusion_matrix(y_pred, y_test)
+    return plot_confusion_matrix(y_pred, y_test)

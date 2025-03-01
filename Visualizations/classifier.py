@@ -29,3 +29,5 @@ def plot_confusion_matrix(y_pred, y_test):
                     ha="center", fontsize=12)
     else:
         plt.figtext(0.5, -0.1, f"Accuracy: {accuracy:.4f}", ha="center", fontsize=12)
+    
+    return accuracy
