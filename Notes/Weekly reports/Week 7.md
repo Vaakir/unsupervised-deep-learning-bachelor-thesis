@@ -14,12 +14,13 @@
 - [ ] prøve å endre regulariserings-vektene mens vi trener.
 - [X] teste modellene på de forskjellige gruppene.
   - Vi observerer svak clustering.
-- [ ] se hvilke hjernedeler som har mest reconstruction loss --> lage en pipeline som tar inn MRI scan og gir ut highlighta plot av ROI med mest loss.
+- [X] se hvilke hjernedeler som har mest reconstruction loss --> lage en pipeline som tar inn MRI scan og gir ut highlighta plot av ROI med mest loss.
+  - Ser ut som det er midt i hjernen som får mest reconstruction loss. For AD gruppen ser vi mye loss i frontal lobe.
 - [ ] teste histogram normalisering --> kan hende det gjør bildene lettere å memorisere.
 - [ ] teste data augmentation
 - [ ] se hvor høy stride vi kan ha. må ha færre parametre uten å gjør utgangsbilde mer blurry.
 - [ ] Identifisere hvor i en modell mest informasjon går tapt (finne bottlenecken). finne ut hvor god metric (SSIM) vi i teorien skal kunne trene opp til ift. bottlenecken.
-- [ ] trene classifier på latent space for hvilken gruppe (binary eller 3) hver pasient tilhører.
+- [X] trene classifier på latent space for hvilken gruppe (binary eller 3) hver pasient tilhører.
 
 # Spørsmål og svar:
 - [ ] burde vi implementere andres løsninger for å sammenligne deres performance med vår i rapporten, eller skal vi stole på at deres latent space oppfører seg på samme måte som vi prøver å få til/at det er sammenlignbart?
