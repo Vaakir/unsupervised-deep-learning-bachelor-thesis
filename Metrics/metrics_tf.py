@@ -41,3 +41,17 @@ def SSIM_loss(y_true, y_pred):
         return 1.0 - average_ssim
     else:
         raise ValueError("Input tensors must be either 3D (for 2D images) or 4D (for 3D images).")
+
+"""
+# Example usage for 2D images
+y_true_2d = tf.random.normal((3, 96, 80))  # (batch_size, height, width)
+y_pred_2d = tf.random.normal((3, 96, 80))
+loss_2d = SSIM_loss(y_true_2d, y_pred_2d)
+print(loss_2d)
+
+# Example usage for 3D images
+y_true_3d = tf.random.normal((3, 96, 80, 10))  # (batch_size, height, width, depth)
+y_pred_3d = tf.random.normal((3, 96, 80, 10))
+loss_3d = SSIM_loss(y_true_3d, y_pred_3d)
+print(loss_3d)
+"""

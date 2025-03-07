@@ -1,0 +1,12 @@
+{
+    "input_shape": "[80, 96, 1]",
+    "latent_dim": "16",
+    "encoder_layers": "[(<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 32, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_308, built=True>, (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 32, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_309, built=True>, (<class 'keras.src.layers.pooling.average_pooling2d.AveragePooling2D'>, {'pool_size': (2, 2)}), (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 64, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_310, built=True>, (<class 'keras.src.layers.pooling.average_pooling2d.AveragePooling2D'>, {'pool_size': (2, 2)}), (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 64, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_311, built=True>, (<class 'keras.src.layers.pooling.average_pooling2d.AveragePooling2D'>, {'pool_size': (2, 2)}), (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 128, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_312, built=True>]",
+    "decoder_layers": "[(<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 64, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_313, built=True>, (<class 'keras.src.layers.reshaping.up_sampling2d.UpSampling2D'>, {'size': (2, 2)}), (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 32, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_314, built=True>, (<class 'keras.src.layers.reshaping.up_sampling2d.UpSampling2D'>, {'size': (2, 2)}), (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 32, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_315, built=True>, (<class 'keras.src.layers.reshaping.up_sampling2d.UpSampling2D'>, {'size': (2, 2)}), (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 1, (3, 3), {'activation': 'sigmoid', 'padding': 'same'})]",
+    "name": "public_repo_l16_3pool",
+    "loss": "MSE_loss",
+    "learning_rate": "0.001",
+    "VAE_model": "False",
+    "debug": "False",
+    "GPU": "False"
+}
