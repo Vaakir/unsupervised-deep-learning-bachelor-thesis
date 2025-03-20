@@ -170,5 +170,4 @@ def load_middle_slices(
 
     idx_split = int(len(images) * train_test_split)
     train, test = images[:idx_split], images[idx_split:]
-
     return train, test
