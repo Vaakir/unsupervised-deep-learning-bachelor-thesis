@@ -13,7 +13,7 @@ def edge_detect(im, k = 1, abs_ = False, alpha = 0.5):
     """
     edge = 3*im - np.roll(im, k, -1) - np.roll(im, k, -2) - np.roll(im, k, -3)
     if abs_: edge = np.abs(edge)
-    return edge + (alpha-edge) * im
+    return edge + (im-edge) * alpha
 
 def preprocess_images(img_list, processes=[]):
     """

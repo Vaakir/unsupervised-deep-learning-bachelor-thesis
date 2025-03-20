@@ -105,6 +105,46 @@ def load(
     return train, test
 
 
+def load_single(
+        fp:str,
+        crop:bool = True,
+        normalize:bool = True,
+        target_size:tuple|None = (80,96,80),
+        ):
+    """
+    :params:
+    - fp: Path relative to this script to the image.
+    - crop: If True: images are cut in all axes s.t. only the non-zero voxels are included.
+    - normalize: If True: magnitude of voxels are normalized between 0 and 1.
+    - target_size: Downsampling target size. Set to None to resample to lowest cropped size.
+    """
+    #- subvoxel_rolling_augmentation: If True: rolls the images around some times, producing a richer dataset.
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of this script
+    fp = os.path.join(script_dir, fp)  # Create the absolute path
+    images = []
+
+    def handle_image(img):
+        if crop:
+            brain_mask = img > 0.01
+            bounds = np.where(brain_mask)
+            x_min, x_max, y_min, y_max, z_min, z_max = np.min(bounds[0]), np.max(bounds[0]), np.min(bounds[1]), np.max(bounds[1]), np.min(bounds[2]), np.max(bounds[2])
+            img = img[x_min-2:x_max+3, y_min-2:y_max+3, z_min-2:z_max+3]
+
+        if normalize:
+            q2m = .785700/.475665
+            fac = np.min([q2m / np.quantile(img,0.98), 1. / np.max(img)])
+            img *= fac
+            
+        if target_size != None:
+            zoom_factors = [t / b for t, b in zip(target_size, img.shape)]
+            img = zoom(img, zoom_factors, order=1)  # Linear interpolation
+
+        return [img]
+    
+    img = nib.load(fp).get_fdata()
+    images.extend(handle_image(img))
+    return np.stack(images)
+
 def load_middle_slices(
         dataset_name: str = "Pre-processed",  # Now takes the full dataset path instead of constructing it
         axis=["sagittal","axial","coronal"][0],
