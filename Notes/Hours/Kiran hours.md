@@ -41,3 +41,10 @@ Week 11 total (25h)
 - 21. mar 09:30 - 16:00 (6.5h) # Writing
 Week 12 total (24.5h)
 
+- 24. mar 09:00 - 15:00 (6h) # reading papers / writing
+- 25. mar 09:00 - 15:00 (6h) # reading papers / writing
+- 26. mar 13:00 - 14:40 (1.7h) # meeting
+- 27. mar, distracted by sideproject :>
+- 28. mar 08:15 - 12:00, 13:00 - 16:00 (7h) # Writing
+Week 13 total (20.7h)
+
