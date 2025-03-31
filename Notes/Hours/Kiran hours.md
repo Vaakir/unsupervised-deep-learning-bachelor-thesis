@@ -48,5 +48,5 @@ Week 12 total (24.5h)
 - 28. mar 08:15 - 12:00, 13:00 - 16:00 (7h) # Writing
 Week 13 total (20.7h)
 
-- 31. mar 08:30 - xx:xx # todo: read the 3 articles, either do "what ketil wanted, whatever that is?", or finish VAE maths explenation/projection algo maths/clustering maths.
+- 31. mar 08:30 -16x:30 (8h) # read the 3 articles, finished VAE maths explenation, restructured thesis (seperated theory (background) from methodology)
 Week 14
