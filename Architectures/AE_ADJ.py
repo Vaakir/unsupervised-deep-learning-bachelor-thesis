@@ -40,6 +40,15 @@ import json
 
 # TODO: Add skip connections
 
+# wasnt able to save vae's without this as a seperate class/function ig, ty jon :) (will implement when I have time, bruh, writing be slow ):
+class Sampling(layers.Layer):
+    def call(self, inputs):
+        mu, logvar = inputs
+        batch = tf.shape(mu)[0]
+        dim = tf.shape(mu)[1]
+        epsilon = tf.random.normal(shape=(batch, dim))
+        return mu + tf.exp(0.5 * logvar) * epsilon
+
 class AE(Model):
     def __init__(self, 
                 input_shape, 
