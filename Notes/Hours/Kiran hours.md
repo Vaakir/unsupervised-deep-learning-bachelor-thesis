@@ -48,5 +48,6 @@ Week 12 total (24.5h)
 - 28. mar 08:15 - 12:00, 13:00 - 16:00 (7h) # Writing
 Week 13 total (20.7h)
 
-- 31. mar 08:30 -16x:30 (8h) # read the 3 articles, finished VAE maths explenation, restructured thesis (seperated theory (background) from methodology)
+- 31. mar 08:30 - 16:30 (8h) # read the 3 articles, finished VAE maths explenation, restructured thesis (seperated theory (background) from methodology)
+- 01. apr 10:00 - 11:00, 13:00 - 16:00 (4h) #
 Week 14
