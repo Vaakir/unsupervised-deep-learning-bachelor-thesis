@@ -46,9 +46,8 @@ def plot_multiple_datasets(model, plot_functions, datasets, labels, colors, titl
     # Loop through each plot function and dataset to plot
     for i, plot_func in enumerate(plot_functions):
         ax = axes[i]
-        plot_func_name = plot_func.__name__
-        title = titles[i] if titles and len(titles) > i else plot_func_name
-        points_2D = dim_red_2D[plot_func_name](latent)
+        title = titles[i] if titles and len(titles) > i else plot_func
+        points_2D = dim_red_2D[plot_func](latent)
         plot_proj(points_2D, datasets, colors, labels, ax, title)
         ax.legend()
     
