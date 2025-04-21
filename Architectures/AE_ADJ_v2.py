@@ -48,6 +48,7 @@ class AE(keras.Model):
         self.hidden_activation = hidden_activation
         self.loss_fn = loss_fn
         self.optimizer = optimizer
+        self.training_time = 0
         #self.GPU = GPU
 
         self.hist = {'loss': [], 'val_loss': [], 'reconstruction_loss': [], 'kl_loss': []}
@@ -239,6 +240,7 @@ class AE(keras.Model):
             "name": str(name),
             "VAE_model": str(self.VAE_model),
             "beta": str(self.beta),
+            "training_time": str(self.training_time),
 
             "loss_fn": str(self.loss_fn) if type(self.loss_fn) is str else str(self.loss_fn.__name__),
             "debug": str(self.debug),
@@ -285,6 +287,8 @@ class AE(keras.Model):
             ae.name = ae.details["name"]
             ae.VAE_model = eval(ae.details["VAE_model"])
             ae.beta = eval(ae.details["beta"])
+            ae.training_time = eval(ae.details["trainig_time"])
+
             ae.loss_fn = {"MSE_loss": MSE_loss, "SSIM_loss": SSIM_loss, "NMSE_loss": NMSE_loss, "NRMSE_loss": NRMSE_loss}[ae.details["loss_fn"]] 
             ae.debug = eval(ae.details["debug"])
             
