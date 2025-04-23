@@ -16,6 +16,10 @@ def NRMSE_loss(y_true, y_pred):
 
 def SSIM_loss(y_true, y_pred):
     """SSIM loss for both 2D and 3D images"""
+    
+    # Cast tensors to float64
+    y_true = tf.cast(y_true, tf.float64)
+    y_pred = tf.cast(y_pred, tf.float64)
 
     # If the image is 2D (batch_size, height, width)
     if len(y_true.shape) == 3:  # (batch_size, height, width)

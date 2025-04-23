@@ -41,3 +41,23 @@ Week 11 total (25h)
 - 21. mar 09:30 - 16:00 (6.5h) # Writing
 Week 12 total (24.5h)
 
+- 24. mar 09:00 - 15:00 (6h) # reading papers / writing
+- 25. mar 09:00 - 15:00 (6h) # reading papers / writing
+- 26. mar 13:00 - 14:40 (1.7h) # meeting
+- 27. mar, distracted by sideproject :>
+- 28. mar 08:15 - 12:00, 13:00 - 16:00 (7h) # Writing
+Week 13 total (20.7h)
+
+- 31. mar 08:30 - 16:30 (8h) # read the 3 articles, finished VAE maths explenation, restructured thesis (seperated theory (background) from methodology)
+- 01. apr 10:00 - 11:00, 13:00 - 16:00 (4h) 
+Week 14 total (uknown)
+
+- 6. apr 08:00 - 16:00 (8) # updating ae_adj
+- 8. apr 10:00 - 16:00 (6) # figured out that k-cross fold is not necessary as we are not interested in rec. metrics for CN
+- 9. apr 11:00 - 13:00 (2) # meeting + talking
+- 10. apr 09:00 - 16:00 (7) # reading, writing, making illustrations
+- 11. apr 09:00 - 16:00 (7) # reading up on metrics 
+Week 15 total (30h)
+
+- 14. apr 07:30 - 18:00 (11.5h) # re-defining model metrics (SSIM for CN,MCI,AD), clustering (Silhouette, Inertia, ARI), re-training models on new AE_ADJ structure
+Week 16 total ()

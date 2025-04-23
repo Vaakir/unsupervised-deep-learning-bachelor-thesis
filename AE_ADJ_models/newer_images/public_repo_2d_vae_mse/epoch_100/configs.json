@@ -1,0 +1,13 @@
+{
+    "input_shape": "[80, 96, 1]",
+    "latent_dim": "128",
+    "encoder_layers": "[(<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 32, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_40, built=True>, (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 32, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_41, built=True>, (<class 'keras.src.layers.pooling.max_pooling2d.MaxPooling2D'>, {'pool_size': (2, 2)}), (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 64, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_42, built=True>, (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 64, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_43, built=True>, (<class 'keras.src.layers.pooling.max_pooling2d.MaxPooling2D'>, {'pool_size': (2, 2)}), (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 128, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_44, built=True>, (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 128, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_45, built=True>]",
+    "decoder_layers": "[(<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 64, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_46, built=True>, (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 64, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_47, built=True>, (<class 'keras.src.layers.reshaping.up_sampling2d.UpSampling2D'>, {'size': (2, 2)}), (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 32, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_48, built=True>, (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 32, (3, 3), {'activation': 'relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_49, built=True>, (<class 'keras.src.layers.reshaping.up_sampling2d.UpSampling2D'>, {'size': (2, 2)}), (<class 'keras.src.layers.convolutional.conv2d.Conv2D'>, 1, (3, 3), {'activation': 'sigmoid', 'padding': 'same'})]",
+    "name": "public_repo_2D_VAE_mse",
+    "VAE_model": "True",
+    "beta": "1",
+    "loss_fn": "MSE_loss",
+    "debug": "False",
+    "hidden_activation": "<function leaky_relu at 0x000002647A529620>",
+    "optimizer": "<keras.src.optimizers.adam.Adam object at 0x0000026444342C50>"
+}
