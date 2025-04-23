@@ -11,3 +11,4 @@
 Data/pca_images.npy
 /Trained Models
 *.npy
+/Cache
