@@ -11,7 +11,10 @@ def edge_detect(im, k = 1, abs_ = False, alpha = 0.5):
     :returns:
     - An image of the same size as input images.
     """
-    edge = 3*im - np.roll(im, k, -1) - np.roll(im, k, -2) - np.roll(im, k, -3)
+    if im.ndim == 3:
+        edge = 3*im - np.roll(im, k, -1) - np.roll(im, k, -2) - np.roll(im, k, -3)
+    else:
+        edge = 3*im - np.roll(im, k, -1) - np.roll(im, k, -2)
     if abs_: edge = np.abs(edge)
     return edge + (im-edge) * alpha
 
