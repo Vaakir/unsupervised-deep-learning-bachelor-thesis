@@ -1,9 +1,59 @@
 import umap
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.cluster.hierarchy import dendrogram, linkage
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE, Isomap
 from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import AgglomerativeClustering
+
+def plot_hierarchical_clustering(model, datasets, labels, colors, title="Hierarchical Clustering Dendrogram (truncated)"):
+    
+    # Combine all datasets for consistent scaling
+    combined_data = np.concatenate(datasets, axis=0)
+    
+    # Standardize the data
+    scaler = StandardScaler()
+    combined_data_scaled = scaler.fit_transform(combined_data.reshape(-1, combined_data.shape[-1])).reshape(combined_data.shape)
+    
+    # Get the model's encoded representation
+    if model.VAE_model:
+        z_mean, z_std, z = model.encoder.predict(combined_data_scaled)
+        latent = z_mean
+    else:
+        latent = model.encoder.predict(combined_data_scaled)
+    
+    n_clusters = len(labels)
+    clustering = AgglomerativeClustering(n_clusters=n_clusters, linkage="")
+    new_labels = clustering.fit_predict(latent)
+
+    # Reduce latent vectors to 2D for plotting
+    #pca = PCA(n_components=2)
+    #reduced = pca.fit_transform(latent)
+    
+    dim_red_2D = {
+        "UMAP": lambda latent: umap.UMAP(n_components=2).fit_transform(latent), # random_state=42
+    }
+    
+    points_2D = dim_red_2D["UMAP"](latent) # Loop through each plot function and dataset to plot
+    linked = linkage(latent, method='ward') # Compute linkage matrix
+
+    # Plot combined figure
+    fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+    axes = axes.flatten()
+    plot_proj(points_2D, datasets, colors, labels, axes[0], "Natural clustering")
+    #sns.scatterplot(ax=axes[0], x=reduced[:, 0], y=reduced[:, 1], hue=new_labels, palette="tab10")
+    #axes[0].set_title("PCA Projection of Latent Vectors (Colored by Cluster)")
+
+    # Dendrogram
+    dendrogram(linked, truncate_mode='level', p=5, ax=axes[1])
+    axes[1].set_title("Hierarchical Clustering Dendrogram (Truncated)")
+    axes[1].set_xlabel("Sample Index")
+    axes[1].set_ylabel("Distance")
+
+    plt.tight_layout()
+    plt.show()
 
 
 def plot_multiple_datasets(model, plot_functions, datasets, labels, colors, titles=None):
@@ -21,15 +71,15 @@ def plot_multiple_datasets(model, plot_functions, datasets, labels, colors, titl
     combined_data = np.concatenate(datasets, axis=0)
     
     # Standardize the data
-    scaler = StandardScaler()
-    combined_data_scaled = scaler.fit_transform(combined_data.reshape(-1, combined_data.shape[-1])).reshape(combined_data.shape)
+    #scaler = StandardScaler()
+    #combined_data_scaled = scaler.fit_transform(combined_data.reshape(-1, combined_data.shape[-1])).reshape(combined_data.shape)
     
     # Get the model's encoded representation
     if model.VAE_model:
-        z_mean, z_std, z = model.encoder.predict(combined_data_scaled)
+        z_mean, z_std, z = model.encoder.predict(combined_data)
         latent = z_mean
     else:
-        latent = model.encoder.predict(combined_data_scaled)
+        latent = model.encoder.predict(combined_data)
     
     num_plots = len(plot_functions)
     num_rows = (num_plots + 2) // 3  # Arrange plots in rows, 3 per row
