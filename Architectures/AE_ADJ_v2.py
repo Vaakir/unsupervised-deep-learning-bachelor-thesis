@@ -287,8 +287,7 @@ class AE(keras.Model):
             ae.name = ae.details["name"]
             ae.VAE_model = eval(ae.details["VAE_model"])
             ae.beta = eval(ae.details["beta"])
-            ae.training_time = eval(ae.details["trainig_time"])
-
+            ae.training_time = eval(ae.details["training_time"]) if "training_time" in ae.details else 0
             ae.loss_fn = {"MSE_loss": MSE_loss, "SSIM_loss": SSIM_loss, "NMSE_loss": NMSE_loss, "NRMSE_loss": NRMSE_loss}[ae.details["loss_fn"]] 
             ae.debug = eval(ae.details["debug"])
             
