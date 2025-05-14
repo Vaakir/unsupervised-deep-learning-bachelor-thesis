@@ -1,0 +1,14 @@
+{
+    "input_shape": "[80, 96, 80, 1]",
+    "latent_dim": "128",
+    "encoder_layers": "[(<class 'keras.src.layers.convolutional.conv3d.Conv3D'>, 40, (5, 5, 5), {'activation': 'leaky_relu', 'strides': (3, 3, 3), 'padding': 'valid'}), <BatchNormalization name=batch_normalization_28, built=True>, (<class 'keras.src.layers.convolutional.conv3d.Conv3D'>, 80, (3, 3, 3), {'activation': 'leaky_relu', 'strides': (5, 5, 5), 'padding': 'valid'}), <BatchNormalization name=batch_normalization_29, built=True>, (<class 'keras.src.layers.pooling.max_pooling3d.MaxPooling3D'>, {'pool_size': (3, 3, 3), 'strides': (1, 1, 1), 'padding': 'same'}), (<class 'keras.src.layers.convolutional.conv3d.Conv3D'>, 120, (3, 3, 3), {'activation': 'leaky_relu', 'strides': (1, 1, 1), 'padding': 'same'}), <BatchNormalization name=batch_normalization_30, built=True>, (<class 'keras.src.layers.pooling.max_pooling3d.MaxPooling3D'>, {'pool_size': (3, 3, 3), 'strides': (1, 1, 1), 'padding': 'same'}), (<class 'keras.src.layers.convolutional.conv3d.Conv3D'>, 120, (3, 3, 3), {'activation': 'leaky_relu', 'strides': (1, 1, 1), 'padding': 'same'}), <BatchNormalization name=batch_normalization_31, built=True>, (<class 'keras.src.layers.pooling.max_pooling3d.MaxPooling3D'>, {'pool_size': (3, 3, 3), 'strides': (1, 1, 1), 'padding': 'same'})]",
+    "decoder_layers": "[(<class 'keras.src.layers.convolutional.conv3d.Conv3D'>, 120, (3, 3, 3), {'activation': 'leaky_relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_32, built=True>, (<class 'keras.src.layers.reshaping.up_sampling3d.UpSampling3D'>, {'size': (2, 2, 2)}), (<class 'keras.src.layers.convolutional.conv3d.Conv3D'>, 120, (3, 3, 3), {'activation': 'leaky_relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_33, built=True>, (<class 'keras.src.layers.reshaping.up_sampling3d.UpSampling3D'>, {'size': (2, 2, 2)}), (<class 'keras.src.layers.convolutional.conv3d.Conv3D'>, 80, (3, 3, 3), {'activation': 'leaky_relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_34, built=True>, (<class 'keras.src.layers.reshaping.up_sampling3d.UpSampling3D'>, {'size': (2, 2, 2)}), (<class 'keras.src.layers.convolutional.conv3d.Conv3D'>, 80, (3, 3, 3), {'activation': 'leaky_relu', 'padding': 'same'}), <BatchNormalization name=batch_normalization_35, built=True>, (<class 'keras.src.layers.reshaping.up_sampling3d.UpSampling3D'>, {'size': (2, 2, 2)}), (<class 'keras.src.layers.convolutional.conv3d.Conv3D'>, 40, (5, 5, 5), {'padding': 'same'}), (<class 'keras.src.layers.convolutional.conv3d.Conv3D'>, 1, (3, 3, 3), {'padding': 'same'})]",
+    "name": "public_alcoholism_paper_3d_mse",
+    "VAE_model": "False",
+    "beta": "1",
+    "training_time": "0",
+    "loss_fn": "MSE_loss",
+    "debug": "False",
+    "hidden_activation": "<function leaky_relu at 0x0000015C24A7D8A0>",
+    "optimizer": "<keras.src.optimizers.adam.Adam object at 0x0000015E76DD3EC0>"
+}
